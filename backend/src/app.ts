@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { connectDB } from "./lib/database";
 import userRoutes from './routes/user.routes';
+import passport from './config/passport';
 dotenv.config();
 
 connectDB();
@@ -19,6 +20,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(passport.initialize());
 
 // Health check
 app.get('/health', (_req, res) => {
