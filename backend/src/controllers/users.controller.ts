@@ -1,6 +1,29 @@
 import { registerUser, loginUser, getUserById } from "../services/user.services";
 import { Request, Response } from "express";
 import { AuthRequest } from "../middlewares/auth.middleware";
+import { generateToken } from "../utils/token";
+
+export const googleCallback = async (req: Request, res: Response) => {
+  try {
+    const user = req.user as any;
+    if (!user) {
+      return res.redirect("http://localhost:3000/?error=auth_failed");
+    }
+
+    const token = generateToken(user._id.toString());
+
+    res.cookie(process.env['COOKIE_NAME'] as string, token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 3 * 24 * 60 * 60 * 1000,
+    });
+
+    res.redirect("http://localhost:3000/");
+  } catch (err: any) {
+    res.redirect("http://localhost:3000/?error=" + encodeURIComponent(err.message));
+  }
+};
 
 export const register = async (req: Request, res: Response) => {
   try {

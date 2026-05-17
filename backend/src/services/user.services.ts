@@ -69,6 +69,11 @@ export const loginUser = async ({
     throw new Error("Invalid username or password");
   }
 
+  // If user has no password, they probably signed up with Google
+  if (!user.password) {
+    throw new Error("This account is linked to Google. Please sign in with Google.");
+  }
+
   // 2️⃣ Compare password
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {

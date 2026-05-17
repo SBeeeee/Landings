@@ -18,7 +18,14 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: true
+    required: function(this: any) {
+      return !this.googleId;
+    }
+  },
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true
   },
   createdAt: {
     type: Date,
