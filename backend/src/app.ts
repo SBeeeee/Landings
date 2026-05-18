@@ -7,7 +7,6 @@ import userRoutes from './routes/user.routes';
 import passport from './config/passport';
 dotenv.config();
 
-connectDB();
 const app = express();
 
 // Middleware
@@ -33,8 +32,10 @@ app.use('/api/users', userRoutes);
 
 const PORT = process.env['PORT'] || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 });
 
 export default app;
