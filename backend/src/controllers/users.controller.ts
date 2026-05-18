@@ -14,8 +14,8 @@ export const googleCallback = async (req: Request, res: Response) => {
 
     res.cookie(process.env['COOKIE_NAME'] as string, token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 3 * 24 * 60 * 60 * 1000,
     });
 
@@ -32,8 +32,8 @@ export const register = async (req: Request, res: Response) => {
     // 1️⃣ Set cookie first
     res.cookie(process.env['COOKIE_NAME'] as string, token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 3 * 24 * 60 * 60 * 1000,
     });
 
@@ -51,8 +51,8 @@ export const login = async (req: Request, res: Response) => {
 
     res.cookie(process.env['COOKIE_NAME'] as string, token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 3 * 24 * 60 * 60 * 1000,
     });
 
