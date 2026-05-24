@@ -12,7 +12,7 @@ export default function LoginForm() {
     if (!initialized) {
       restoreSession();
     } else if (user) {
-      router.push('/');
+      router.push('/dashboard');
     }
   }, [user, initialized, router, restoreSession]);
 
