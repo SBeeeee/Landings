@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { connectDB } from "./lib/database";
 import userRoutes from './routes/user.routes';
+import businessRoutes from './routes/business.routes';
 import passport from './config/passport';
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.get('/health', (_req, res) => {
 
 
 app.use('/api/users', userRoutes);
+app.use('/api/business', businessRoutes);
 
 const PORT = process.env['PORT'] || 5000;
 
