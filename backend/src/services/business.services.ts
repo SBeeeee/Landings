@@ -1,4 +1,5 @@
 import Business from '../models/Business.models';
+import User from '../models/User.models';
 
 // ── Input types ───────────────────────────────────────────────────────────────
 
@@ -45,6 +46,62 @@ export interface CreateBusinessInput {
 }
 
 export type UpdateBusinessInput = Partial<Omit<CreateBusinessInput, 'username'>>;
+export type IntakeBusinessInput = CreateBusinessInput;
+
+const sanitizeString = (value?: string) => {
+  if (!value) return undefined;
+  return value
+    .replace(/[<>"'`]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
+const sanitizeUsername = (value?: string) => {
+  const cleaned = sanitizeString(value)?.toLowerCase().replace(/[^a-z0-9-]/g, '');
+  return cleaned;
+};
+
+const sanitizeIntake = (data: IntakeBusinessInput): IntakeBusinessInput => ({
+  username: sanitizeUsername(data.username) || '',
+  businessName: sanitizeString(data.businessName) || '',
+  businessType: data.businessType,
+  tagline: sanitizeString(data.tagline),
+  description: sanitizeString(data.description),
+  services: data.services?.map((service) => ({
+    name: sanitizeString(service.name),
+    description: sanitizeString(service.description),
+    price: sanitizeString(service.price),
+    duration: sanitizeString(service.duration),
+  })),
+  contact: data.contact
+    ? {
+        phone: sanitizeString(data.contact.phone),
+        email: sanitizeString(data.contact.email)?.toLowerCase(),
+        address: sanitizeString(data.contact.address),
+        whatsapp: sanitizeString(data.contact.whatsapp),
+        socialLinks: data.contact.socialLinks
+          ? {
+              instagram: sanitizeString(data.contact.socialLinks.instagram),
+              facebook: sanitizeString(data.contact.socialLinks.facebook),
+              linkedin: sanitizeString(data.contact.socialLinks.linkedin),
+            }
+          : undefined,
+      }
+    : undefined,
+  gallery: data.gallery?.map((item) => sanitizeString(item) || '').filter(Boolean),
+  operatingHours: data.operatingHours
+    ? {
+        monday: sanitizeString(data.operatingHours.monday),
+        tuesday: sanitizeString(data.operatingHours.tuesday),
+        wednesday: sanitizeString(data.operatingHours.wednesday),
+        thursday: sanitizeString(data.operatingHours.thursday),
+        friday: sanitizeString(data.operatingHours.friday),
+        saturday: sanitizeString(data.operatingHours.saturday),
+        sunday: sanitizeString(data.operatingHours.sunday),
+      }
+    : undefined,
+  theme: sanitizeString(data.theme),
+});
 
 // ── Service functions ─────────────────────────────────────────────────────────
 
@@ -143,4 +200,47 @@ export const deleteBusiness = async (userId: string) => {
 export const checkUsernameAvailability = async (username: string) => {
   const existing = await Business.findOne({ username });
   return { available: !existing };
+};
+
+/**
+ * Submit onboarding/intake data for business page creation.
+ * Upserts a single record per user so they can re-submit as they refine details.
+ */
+export const submitBusinessIntake = async (
+  userId: string,
+  data: IntakeBusinessInput
+) => {
+  const sanitized = sanitizeIntake(data);
+
+  const user = await User.findById(userId).select('username');
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const existingByUser = await Business.findOne({ userId });
+  if (existingByUser) {
+    throw new Error('You can only create one site. Details are already submitted.');
+  }
+
+  // Default to auth username unless user intentionally provides a different one.
+  if (!sanitized.username) {
+    sanitized.username = user.username;
+  }
+
+  if (!sanitized.businessName) {
+    throw new Error('Business name is required');
+  }
+
+  const existingByUsername = await Business.findOne({ username: sanitized.username });
+  if (existingByUsername && existingByUsername.userId.toString() !== userId) {
+    throw new Error("This username is already taken");
+  }
+
+  const business = await Business.create({
+    ...sanitized,
+    userId,
+    updatedAt: new Date(),
+  });
+
+  return business;
 };

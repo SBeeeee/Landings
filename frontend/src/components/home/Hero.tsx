@@ -36,7 +36,7 @@ export default function Hero() {
 
       {/* CTAs */}
       <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-        <Link href="/register">
+        <Link href="/dashboard/setup">
           <Button size="lg">
             Create your page — it&apos;s free
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

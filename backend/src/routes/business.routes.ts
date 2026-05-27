@@ -8,6 +8,7 @@ import {
   publish,
   remove,
   checkUsername,
+  submitIntake,
 } from '../controllers/business.controller';
 
 const router = express.Router();
@@ -18,6 +19,7 @@ router.get('/check-username/:username', checkUsername);
 
 // ── Protected routes (must be logged in) ─────────────────────────────────────
 router.post('/', verifyUser, create);
+router.post('/intake', verifyUser, submitIntake);
 router.get('/me', verifyUser, getMe);
 router.put('/me', verifyUser, update);
 router.patch('/me/publish', verifyUser, publish);

@@ -5,9 +5,10 @@ import { generateToken } from "../utils/token";
 
 export const googleCallback = async (req: Request, res: Response) => {
   try {
+    const frontendBaseUrl = process.env['FRONTEND_URL'] || "http://localhost:3000";
     const user = req.user as any;
     if (!user) {
-      return res.redirect("http://localhost:3000/?error=auth_failed");
+      return res.redirect(`${frontendBaseUrl}/login?error=auth_failed`);
     }
 
     const token = generateToken(user._id.toString());
@@ -19,9 +20,10 @@ export const googleCallback = async (req: Request, res: Response) => {
       maxAge: 3 * 24 * 60 * 60 * 1000,
     });
 
-    res.redirect("http://localhost:3000/");
+    res.redirect(`${frontendBaseUrl}/dashboard`);
   } catch (err: any) {
-    res.redirect("http://localhost:3000/?error=" + encodeURIComponent(err.message));
+    const frontendBaseUrl = process.env['FRONTEND_URL'] || "http://localhost:3000";
+    res.redirect(`${frontendBaseUrl}/login?error=` + encodeURIComponent(err.message));
   }
 };
 

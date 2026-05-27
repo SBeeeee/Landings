@@ -14,7 +14,7 @@ yarn-error.log*
 # TypeScript compiled output
 dist/
 build/
-
+backend/notes.txt
 # Logs
 logs/
 *.log

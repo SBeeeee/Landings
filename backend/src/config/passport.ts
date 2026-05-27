@@ -5,6 +5,26 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const slugifyUsername = (value: string) =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "")
+    .replace(/^_+|_+$/g, "");
+
+const buildUniqueUsername = async (baseValue: string) => {
+  const base = slugifyUsername(baseValue) || "user";
+  let username = base;
+  let suffix = 1;
+
+  while (await User.findOne({ username })) {
+    username = `${base}${suffix}`;
+    suffix += 1;
+  }
+
+  return username;
+};
+
 passport.use(
   new GoogleStrategy(
     {
@@ -33,10 +53,11 @@ passport.use(
             }
         }
 
-        // Create new user
-        // Ensure username is unique by appending a random suffix
-        let baseUsername = profile.displayName ? profile.displayName.replace(/\s+/g, '').toLowerCase() : `user_${profile.id}`;
-        let username = `${baseUsername}_${Math.floor(Math.random() * 10000)}`;
+        // Create new user with a stable, readable username.
+        const emailHandle = email?.split("@")[0];
+        const preferredUsername =
+          emailHandle || profile.displayName || `user${profile.id}`;
+        const username = await buildUniqueUsername(preferredUsername);
 
         const newUser = await User.create({
           googleId: profile.id,

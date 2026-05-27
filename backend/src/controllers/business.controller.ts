@@ -9,6 +9,7 @@ import {
   togglePublish,
   deleteBusiness,
   checkUsernameAvailability,
+  submitBusinessIntake,
 } from '../services/business.services';
 
 // POST /api/business
@@ -79,6 +80,16 @@ export const checkUsername = async (req: Request, res: Response) => {
       req.params['username'] as string
     );
     res.status(200).json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+// POST /api/business/intake
+export const submitIntake = async (req: AuthRequest, res: Response) => {
+  try {
+    const business = await submitBusinessIntake(req.userId as string, req.body);
+    res.status(200).json({ message: 'Business intake saved', business });
   } catch (err: any) {
     res.status(400).json({ error: err.message });
   }
