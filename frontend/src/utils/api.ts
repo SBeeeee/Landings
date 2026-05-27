@@ -7,6 +7,22 @@ const api = axios.create({
   xsrfHeaderName: 'x-csrf-token',
 });
 
+api.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    const token = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('csrf_token='))
+      ?.split('=')[1];
+
+    if (token) {
+      config.headers = config.headers ?? {};
+      config.headers['x-csrf-token'] = decodeURIComponent(token);
+    }
+  }
+
+  return config;
+});
+
 api.interceptors.response.use(
   (res) => res,
   (err) => {
