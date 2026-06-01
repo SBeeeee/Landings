@@ -5,6 +5,7 @@ import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
 import Select from '@/components/ui/Select';
 import Button from '@/components/ui/Button';
+import Card from '@/components/ui/Card';
 import { useBusiness } from '@/hooks/useBusiness';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -17,9 +18,26 @@ const businessTypes = [
   { value: 'other', label: 'Other' },
 ];
 
+const daysOfWeek = [
+  { key: 'monday', label: 'Monday' },
+  { key: 'tuesday', label: 'Tuesday' },
+  { key: 'wednesday', label: 'Wednesday' },
+  { key: 'thursday', label: 'Thursday' },
+  { key: 'friday', label: 'Friday' },
+  { key: 'saturday', label: 'Saturday' },
+  { key: 'sunday', label: 'Sunday' },
+];
+
+interface Service {
+  name: string;
+  description: string;
+  price: string;
+  duration: string;
+}
+
 export default function BusinessSetupPage() {
   const { user } = useAuth();
-  const { submitIntake, loading, error, clearError, business, fetchMyBusiness } =
+  const { submitIntake, updateBusiness, loading, error, clearError, business, fetchMyBusiness } =
     useBusiness();
   const [saved, setSaved] = useState(false);
   const [allowUsernameChange, setAllowUsernameChange] = useState(false);
@@ -35,7 +53,25 @@ export default function BusinessSetupPage() {
     contactEmail: '',
     contactAddress: '',
     contactWhatsapp: '',
+    // Social links
+    socialInstagram: '',
+    socialFacebook: '',
+    socialLinkedin: '',
+    // Operating hours
+    operatingHours: {
+      monday: '',
+      tuesday: '',
+      wednesday: '',
+      thursday: '',
+      friday: '',
+      saturday: '',
+      sunday: '',
+    },
   });
+
+  const [services, setServices] = useState<Service[]>([
+    { name: '', description: '', price: '', duration: '' }
+  ]);
 
   useEffect(() => {
     fetchMyBusiness();
@@ -61,7 +97,29 @@ export default function BusinessSetupPage() {
       contactEmail: business.contact?.email || '',
       contactAddress: business.contact?.address || '',
       contactWhatsapp: business.contact?.whatsapp || '',
+      socialInstagram: business.contact?.socialLinks?.instagram || '',
+      socialFacebook: business.contact?.socialLinks?.facebook || '',
+      socialLinkedin: business.contact?.socialLinks?.linkedin || '',
+      operatingHours: {
+        monday: business.operatingHours?.monday || '',
+        tuesday: business.operatingHours?.tuesday || '',
+        wednesday: business.operatingHours?.wednesday || '',
+        thursday: business.operatingHours?.thursday || '',
+        friday: business.operatingHours?.friday || '',
+        saturday: business.operatingHours?.saturday || '',
+        sunday: business.operatingHours?.sunday || '',
+      },
     }));
+
+    if (business.services && business.services.length > 0) {
+      setServices(business.services.map(service => ({
+        name: service.name || '',
+        description: service.description || '',
+        price: service.price || '',
+        duration: service.duration || '',
+      })));
+    }
+
     setSaved(true);
     setSameAsPhone(
       !!business.contact?.phone &&
@@ -83,13 +141,44 @@ export default function BusinessSetupPage() {
     });
   };
 
+  const handleOperatingHoursChange = (day: string, value: string) => {
+    setSaved(false);
+    setFormData((prev) => ({
+      ...prev,
+      operatingHours: {
+        ...prev.operatingHours,
+        [day]: value,
+      },
+    }));
+  };
+
+  const handleServiceChange = (index: number, field: keyof Service, value: string) => {
+    setSaved(false);
+    setServices((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  const addService = () => {
+    setServices((prev) => [...prev, { name: '', description: '', price: '', duration: '' }]);
+  };
+
+  const removeService = (index: number) => {
+    if (services.length > 1) {
+      setServices((prev) => prev.filter((_, i) => i !== index));
+      setSaved(false);
+    }
+  };
+
   const hasSubmittedSite = !!business?._id;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     clearError();
 
-    const result = await submitIntake({
+    const businessData = {
       username: formData.username,
       businessName: formData.businessName,
       businessType: formData.businessType as
@@ -101,13 +190,29 @@ export default function BusinessSetupPage() {
         | 'other',
       tagline: formData.tagline,
       description: formData.description,
+      services: services.filter(service => service.name.trim() !== ''),
       contact: {
         phone: formData.contactPhone,
         email: formData.contactEmail,
         address: formData.contactAddress,
         whatsapp: formData.contactWhatsapp,
+        socialLinks: {
+          instagram: formData.socialInstagram,
+          facebook: formData.socialFacebook,
+          linkedin: formData.socialLinkedin,
+        },
       },
-    });
+      operatingHours: formData.operatingHours,
+    };
+
+    let result;
+    if (hasSubmittedSite) {
+      // Update existing business
+      result = await updateBusiness(businessData);
+    } else {
+      // Create new business
+      result = await submitIntake(businessData);
+    }
 
     if (!('error' in result)) {
       setSaved(true);
@@ -126,7 +231,7 @@ export default function BusinessSetupPage() {
         {saved && <p className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">Business data saved successfully.</p>}
         {hasSubmittedSite && (
           <p className="rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-3 py-2 text-sm text-indigo-200">
-            You have already submitted one site. Only one site per user is allowed.
+            You can update your business information below.
           </p>
         )}
 
@@ -157,7 +262,7 @@ export default function BusinessSetupPage() {
           placeholder="Priya Beauty Studio"
           value={formData.businessName}
           onChange={(e) => handleChange('businessName', e.target.value)}
-          disabled={hasSubmittedSite}
+          disabled={false}
           required
         />
 
@@ -166,7 +271,7 @@ export default function BusinessSetupPage() {
           value={formData.businessType}
           onChange={(e) => handleChange('businessType', e.target.value)}
           options={businessTypes}
-          disabled={hasSubmittedSite}
+          disabled={false}
           required
         />
 
@@ -175,7 +280,7 @@ export default function BusinessSetupPage() {
           placeholder="Glow with confidence"
           value={formData.tagline}
           onChange={(e) => handleChange('tagline', e.target.value)}
-          disabled={hasSubmittedSite}
+          disabled={false}
         />
 
         <Textarea
@@ -183,7 +288,7 @@ export default function BusinessSetupPage() {
           placeholder="Tell us about your business"
           value={formData.description}
           onChange={(e) => handleChange('description', e.target.value)}
-          disabled={hasSubmittedSite}
+          disabled={false}
         />
 
         <Input
@@ -191,7 +296,7 @@ export default function BusinessSetupPage() {
           placeholder="+91..."
           value={formData.contactPhone}
           onChange={(e) => handleChange('contactPhone', e.target.value)}
-          disabled={hasSubmittedSite}
+          disabled={false}
         />
 
         <Input
@@ -199,7 +304,7 @@ export default function BusinessSetupPage() {
           placeholder="business@example.com"
           value={formData.contactEmail}
           onChange={(e) => handleChange('contactEmail', e.target.value)}
-          disabled={hasSubmittedSite}
+          disabled={false}
         />
 
         <Input
@@ -207,7 +312,7 @@ export default function BusinessSetupPage() {
           placeholder="Street, City"
           value={formData.contactAddress}
           onChange={(e) => handleChange('contactAddress', e.target.value)}
-          disabled={hasSubmittedSite}
+          disabled={false}
         />
 
         <Input
@@ -215,13 +320,13 @@ export default function BusinessSetupPage() {
           placeholder="+91..."
           value={formData.contactWhatsapp}
           onChange={(e) => handleChange('contactWhatsapp', e.target.value)}
-          disabled={hasSubmittedSite || sameAsPhone}
+          disabled={sameAsPhone}
         />
         <label className="flex items-center gap-2 text-sm text-gray-300">
           <input
             type="checkbox"
             checked={sameAsPhone}
-            disabled={hasSubmittedSite}
+            disabled={false}
             onChange={(e) => {
               const checked = e.target.checked;
               setSameAsPhone(checked);
@@ -237,8 +342,131 @@ export default function BusinessSetupPage() {
           WhatsApp same as phone number
         </label>
 
-        <Button type="submit" size="lg" disabled={loading || hasSubmittedSite}>
-          {loading ? 'Saving...' : 'Save Business Data'}
+        {/* Social Links Section */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-white">Social Media Links</h3>
+          <p className="text-sm text-gray-400">Add your social media profiles (optional)</p>
+          
+          <Input
+            label="Instagram"
+            placeholder="https://instagram.com/yourbusiness"
+            value={formData.socialInstagram}
+            onChange={(e) => handleChange('socialInstagram', e.target.value)}
+            disabled={false}
+          />
+
+          <Input
+            label="Facebook"
+            placeholder="https://facebook.com/yourbusiness"
+            value={formData.socialFacebook}
+            onChange={(e) => handleChange('socialFacebook', e.target.value)}
+            disabled={false}
+          />
+
+          <Input
+            label="LinkedIn"
+            placeholder="https://linkedin.com/company/yourbusiness"
+            value={formData.socialLinkedin}
+            onChange={(e) => handleChange('socialLinkedin', e.target.value)}
+            disabled={false}
+          />
+        </div>
+
+        {/* Services Section */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-white">Services</h3>
+              <p className="text-sm text-gray-400">Add the services you offer</p>
+            </div>
+            {true && (
+              <Button
+                type="button"
+                onClick={addService}
+                size="sm"
+                className="bg-indigo-600 hover:bg-indigo-700"
+              >
+                Add Service
+              </Button>
+            )}
+          </div>
+
+          {services.map((service, index) => (
+            <Card key={index} className="p-4 space-y-3 bg-white/5 border-white/10">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-medium text-white">Service {index + 1}</h4>
+                {true && services.length > 1 && (
+                  <Button
+                    type="button"
+                    onClick={() => removeService(index)}
+                    size="sm"
+                    className="bg-red-600 hover:bg-red-700 text-xs px-2 py-1"
+                  >
+                    Remove
+                  </Button>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <Input
+                  label="Service Name"
+                  placeholder="e.g. Hair Cut"
+                  value={service.name}
+                  onChange={(e) => handleServiceChange(index, 'name', e.target.value)}
+                  disabled={false}
+                />
+
+                <Input
+                  label="Price"
+                  placeholder="e.g. ₹500"
+                  value={service.price}
+                  onChange={(e) => handleServiceChange(index, 'price', e.target.value)}
+                  disabled={false}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <Input
+                  label="Duration"
+                  placeholder="e.g. 30 mins"
+                  value={service.duration}
+                  onChange={(e) => handleServiceChange(index, 'duration', e.target.value)}
+                  disabled={false}
+                />
+              </div>
+
+              <Textarea
+                label="Description"
+                placeholder="Brief description of the service"
+                value={service.description}
+                onChange={(e) => handleServiceChange(index, 'description', e.target.value)}
+                disabled={false}
+              />
+            </Card>
+          ))}
+        </div>
+
+        {/* Operating Hours Section */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-white">Operating Hours</h3>
+          <p className="text-sm text-gray-400">Set your business hours (optional)</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {daysOfWeek.map((day) => (
+              <Input
+                key={day.key}
+                label={day.label}
+                placeholder="e.g. 9:00 AM - 6:00 PM or Closed"
+                value={formData.operatingHours[day.key as keyof typeof formData.operatingHours]}
+                onChange={(e) => handleOperatingHoursChange(day.key, e.target.value)}
+                disabled={false}
+              />
+            ))}
+          </div>
+        </div>
+
+        <Button type="submit" size="lg" disabled={loading}>
+          {loading ? 'Saving...' : hasSubmittedSite ? 'Update Business Data' : 'Save Business Data'}
         </Button>
       </form>
     </div>
