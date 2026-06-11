@@ -7,13 +7,13 @@ interface SalonTemplateProps {
 }
 
 export default function SalonTemplate({ business }: SalonTemplateProps) {
-  const { 
-    businessName, 
-    tagline, 
-    description, 
-    services = [], 
-    contact, 
-    operatingHours 
+  const {
+    businessName,
+    tagline,
+    description,
+    services = [],
+    contact,
+    operatingHours,
   } = business;
 
   const handleContactClick = (type: 'phone' | 'whatsapp' | 'email') => {
@@ -22,7 +22,8 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
         if (contact?.phone) window.open(`tel:${contact.phone}`);
         break;
       case 'whatsapp':
-        if (contact?.whatsapp) window.open(`https://wa.me/${contact.whatsapp.replace(/[^0-9]/g, '')}`);
+        if (contact?.whatsapp)
+          window.open(`https://wa.me/${contact.whatsapp.replace(/[^0-9]/g, '')}`);
         break;
       case 'email':
         if (contact?.email) window.open(`mailto:${contact.email}`);
@@ -32,245 +33,413 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
 
   const handleSocialClick = (platform: 'instagram' | 'facebook' | 'linkedin') => {
     const url = contact?.socialLinks?.[platform];
-    if (url) {
-      window.open(url, '_blank');
-    }
+    if (url) window.open(url, '_blank');
   };
 
+  const hourEntries = operatingHours
+    ? Object.entries(operatingHours).filter(([, v]) => v)
+    : [];
+  const halfHours = Math.ceil(hourEntries.length / 2);
+
+  const marqueeItems = [
+    businessName,
+    'Expert Stylists',
+    'Book Today',
+    'Award Winning',
+    'Premium Products',
+    'Personal Service',
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
-      {/* Header/Navigation */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-pink-100 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">{businessName}</h1>
-            {tagline && <p className="text-sm text-pink-600">{tagline}</p>}
-          </div>
-          <div className="flex gap-3">
-            {contact?.phone && (
-              <Button 
-                onClick={() => handleContactClick('phone')}
-                className="bg-pink-600 hover:bg-pink-700"
-              >
-                Call Now
-              </Button>
-            )}
-            {contact?.whatsapp && (
-              <Button 
-                onClick={() => handleContactClick('whatsapp')}
-                className="bg-green-600 hover:bg-green-700"
-              >
-                WhatsApp
-              </Button>
-            )}
-          </div>
+    <div
+      style={{ fontFamily: "'Montserrat', sans-serif" }}
+      className="min-h-screen bg-[#0A0A0A] text-[#F5F0E8]"
+    >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap');
+        .salon-serif { font-family: 'Cormorant Garamond', serif; }
+        .salon-gold { color: #C9A84C; }
+        .salon-gold-border { border-color: rgba(201,168,76,0.4); }
+        .salon-marquee { animation: salonMarquee 18s linear infinite; display: flex; white-space: nowrap; }
+        @keyframes salonMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .salon-service-card:hover { border-color: rgba(201,168,76,0.4) !important; background: rgba(201,168,76,0.03) !important; }
+        .salon-btn-ghost { transition: all 0.3s; }
+        .salon-btn-ghost:hover { background: #C9A84C !important; color: #0A0A0A !important; }
+        .salon-btn-solid:hover { background: #E8C97A !important; }
+        .salon-contact-card:hover { border-color: rgba(201,168,76,0.4) !important; }
+        .salon-social-btn:hover { border-color: #C9A84C !important; color: #C9A84C !important; }
+      `}</style>
+
+      {/* NAV */}
+      <header
+        className="sticky top-0 z-50 flex items-center justify-between px-12 py-5"
+        style={{
+          background: 'rgba(10,10,10,0.92)',
+          backdropFilter: 'blur(12px)',
+          borderBottom: '0.5px solid rgba(201,168,76,0.25)',
+        }}
+      >
+        <div>
+          <h1
+            className="salon-serif salon-gold text-2xl font-light tracking-[0.15em] uppercase"
+          >
+            {businessName}
+          </h1>
+          {tagline && (
+            <p className="text-[0.62rem] tracking-[0.35em] uppercase text-[#D4C9B2] mt-0.5">
+              {tagline}
+            </p>
+          )}
+        </div>
+        <div className="flex gap-3 items-center">
+          {contact?.phone && (
+            <button
+              onClick={() => handleContactClick('phone')}
+              className="salon-btn-ghost text-[#C9A84C] text-[0.65rem] tracking-[0.2em] uppercase px-5 py-2 bg-transparent"
+              style={{ border: '0.5px solid rgba(201,168,76,0.5)' }}
+            >
+              Call Us
+            </button>
+          )}
+          {contact?.whatsapp && (
+            <button
+              onClick={() => handleContactClick('whatsapp')}
+              className="salon-btn-solid bg-[#C9A84C] text-[#0A0A0A] text-[0.65rem] tracking-[0.2em] uppercase px-5 py-2 font-medium"
+              style={{ border: '0.5px solid #C9A84C' }}
+            >
+              WhatsApp
+            </button>
+          )}
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-5xl font-extrabold text-gray-900 mb-6">
-            Welcome to {businessName}
-          </h2>
-          {tagline && (
-            <p className="text-xl text-pink-600 mb-8 font-medium">{tagline}</p>
+      {/* HERO */}
+      <section className="relative min-h-[88vh] flex flex-col justify-center px-12 py-24 overflow-hidden">
+        {/* Decorative lines */}
+        <svg
+          className="absolute right-0 top-0 w-[45%] h-full pointer-events-none opacity-50"
+          viewBox="0 0 500 700"
+          preserveAspectRatio="xMaxYMid slice"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <line x1="80" y1="0" x2="420" y2="700" stroke="#C9A84C" strokeWidth="0.5" opacity="0.3" />
+          <line x1="160" y1="0" x2="500" y2="700" stroke="#C9A84C" strokeWidth="0.5" opacity="0.2" />
+          <line x1="0" y1="100" x2="500" y2="350" stroke="#C9A84C" strokeWidth="0.5" opacity="0.15" />
+          <circle cx="380" cy="200" r="130" fill="none" stroke="#C9A84C" strokeWidth="0.5" opacity="0.2" />
+          <circle cx="380" cy="200" r="85" fill="none" stroke="#C9A84C" strokeWidth="0.5" opacity="0.15" />
+          <circle cx="380" cy="200" r="40" fill="rgba(201,168,76,0.04)" stroke="#C9A84C" strokeWidth="0.5" opacity="0.3" />
+        </svg>
+
+        <div
+          className="text-[0.62rem] tracking-[0.5em] uppercase text-[#C9A84C] mb-7 flex items-center gap-4"
+        >
+          <span style={{ display: 'block', width: 40, height: '0.5px', background: '#C9A84C' }} />
+          Est. — Award-Winning Studio
+        </div>
+
+        <h2
+          className="salon-serif font-light leading-[1.05] text-[#F5F0E8] mb-3 max-w-[65%]"
+          style={{ fontSize: 'clamp(3.5rem, 7vw, 6rem)' }}
+        >
+          Where Beauty<br />Becomes{' '}
+          <em className="text-[#C9A84C] italic">Art</em>
+        </h2>
+
+        {description && (
+          <p className="text-[0.72rem] tracking-[0.25em] uppercase text-[#D4C9B2] mt-5 mb-10 max-w-[40ch] leading-[2]">
+            {description}
+          </p>
+        )}
+
+        <div className="flex gap-5 flex-wrap">
+          {contact?.phone && (
+            <button
+              onClick={() => handleContactClick('phone')}
+              className="salon-btn-solid bg-[#C9A84C] text-[#0A0A0A] text-[0.7rem] tracking-[0.2em] uppercase px-8 py-3.5 font-medium"
+              style={{ border: '0.5px solid #C9A84C' }}
+            >
+              Book Appointment
+            </button>
           )}
-          {description && (
-            <p className="text-lg text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
-              {description}
-            </p>
+          {contact?.whatsapp && (
+            <button
+              onClick={() => handleContactClick('whatsapp')}
+              className="salon-btn-ghost text-[#C9A84C] text-[0.7rem] tracking-[0.2em] uppercase px-8 py-3.5 bg-transparent"
+              style={{ border: '0.5px solid rgba(201,168,76,0.5)' }}
+            >
+              Chat on WhatsApp
+            </button>
           )}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {contact?.phone && (
-              <Button 
-                size="lg"
-                onClick={() => handleContactClick('phone')}
-                className="bg-pink-600 hover:bg-pink-700 text-lg px-8 py-4"
-              >
-                📞 Book Appointment
-              </Button>
-            )}
-            {contact?.whatsapp && (
-              <Button 
-                size="lg"
-                onClick={() => handleContactClick('whatsapp')}
-                className="bg-green-600 hover:bg-green-700 text-lg px-8 py-4"
-              >
-                💬 Chat on WhatsApp
-              </Button>
-            )}
+        </div>
+
+        {/* Aside stats */}
+        <div className="absolute right-12 top-1/2 -translate-y-1/2 flex flex-col gap-6 items-end">
+          <div className="text-right">
+            <div className="salon-serif salon-gold font-light" style={{ fontSize: '3rem', lineHeight: 1 }}>500+</div>
+            <div className="text-[0.6rem] tracking-[0.3em] uppercase text-[#D4C9B2] mt-1">Happy Clients</div>
           </div>
+          <div style={{ width: '0.5px', height: 60, background: 'rgba(201,168,76,0.3)', marginLeft: 'auto' }} />
+          <div className="text-right">
+            <div className="salon-serif salon-gold font-light" style={{ fontSize: '3rem', lineHeight: 1 }}>6+</div>
+            <div className="text-[0.6rem] tracking-[0.3em] uppercase text-[#D4C9B2] mt-1">Years Excellence</div>
+          </div>
+          <div style={{ width: '0.5px', height: 60, background: 'rgba(201,168,76,0.3)', marginLeft: 'auto' }} />
+          <div className="text-right">
+            <div className="salon-serif salon-gold font-light" style={{ fontSize: '3rem', lineHeight: 1 }}>12</div>
+            <div className="text-[0.6rem] tracking-[0.3em] uppercase text-[#D4C9B2] mt-1">Expert Stylists</div>
+          </div>
+        </div>
+
+        <div
+          className="absolute bottom-10 left-12 text-[0.6rem] tracking-[0.35em] uppercase text-[#D4C9B2] flex items-center gap-3"
+        >
+          Scroll to explore
+          <span style={{ display: 'block', width: 50, height: '0.5px', background: 'currentColor' }} />
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* MARQUEE STRIP */}
+      <div
+        className="overflow-hidden py-3.5"
+        style={{
+          borderTop: '0.5px solid rgba(201,168,76,0.2)',
+          borderBottom: '0.5px solid rgba(201,168,76,0.2)',
+          background: '#141414',
+        }}
+      >
+        <div className="salon-marquee">
+          {[...marqueeItems, ...marqueeItems].map((item, i) => (
+            <span key={i} className="flex items-center">
+              <span className="text-[0.62rem] tracking-[0.4em] uppercase text-[#D4C9B2] px-10">
+                {item}
+              </span>
+              <span className="text-[#C9A84C] text-sm">✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* SERVICES */}
       {services.length > 0 && (
-        <section className="py-16 px-4 bg-white/50">
-          <div className="max-w-6xl mx-auto">
-            <h3 className="text-4xl font-bold text-center text-gray-900 mb-12">
-              Our Services
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.map((service, index) => (
-                <Card key={index} className="p-6 bg-white border-pink-100 hover:shadow-lg transition-shadow">
-                  <div className="text-center">
-                    <h4 className="text-xl font-semibold text-gray-900 mb-3">
-                      {service.name}
-                    </h4>
-                    {service.description && (
-                      <p className="text-gray-600 mb-4 text-sm leading-relaxed">
-                        {service.description}
-                      </p>
+        <section className="px-12 py-24">
+          <div
+            className="text-[0.6rem] tracking-[0.5em] uppercase text-[#C9A84C] mb-14 flex items-center gap-4"
+          >
+            Our Services
+            <span
+              style={{ flex: 1, height: '0.5px', background: 'rgba(201,168,76,0.25)' }}
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {services.map((service, index) => (
+              <div
+                key={index}
+                className="salon-service-card p-10 transition-all duration-300 cursor-default"
+                style={{ border: '0.5px solid rgba(201,168,76,0.12)' }}
+              >
+                <div
+                  className="salon-serif font-light mb-4"
+                  style={{ fontSize: '3.5rem', color: 'rgba(201,168,76,0.12)', lineHeight: 1 }}
+                >
+                  {String(index + 1).padStart(2, '0')}
+                </div>
+                <h3 className="salon-serif text-[1.35rem] text-[#F5F0E8] mb-2">
+                  {service.name}
+                </h3>
+                {service.description && (
+                  <p className="text-[0.68rem] tracking-[0.06em] leading-[1.9] text-[#D4C9B2]">
+                    {service.description}
+                  </p>
+                )}
+                {(service.price || service.duration) && (
+                  <div
+                    className="flex justify-between items-center mt-6 pt-6"
+                    style={{ borderTop: '0.5px solid rgba(201,168,76,0.15)' }}
+                  >
+                    {service.price && (
+                      <span className="salon-serif text-[1.1rem] text-[#C9A84C]">
+                        {service.price}
+                      </span>
                     )}
-                    <div className="flex justify-between items-center text-sm">
-                      {service.price && (
-                        <span className="text-pink-600 font-semibold text-lg">
-                          {service.price}
-                        </span>
-                      )}
-                      {service.duration && (
-                        <span className="text-gray-500">
-                          ⏱️ {service.duration}
-                        </span>
-                      )}
-                    </div>
+                    {service.duration && (
+                      <span className="text-[0.6rem] tracking-[0.2em] uppercase text-[#D4C9B2]">
+                        {service.duration}
+                      </span>
+                    )}
                   </div>
-                </Card>
-              ))}
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* HOURS */}
+      {hourEntries.length > 0 && (
+        <div className="px-12 py-20" style={{ background: '#141414' }}>
+          <div className="max-w-4xl mx-auto">
+            <div
+              className="text-[0.6rem] tracking-[0.5em] uppercase text-[#C9A84C] mb-12 flex items-center gap-4"
+            >
+              Opening Hours
+              <span style={{ flex: 1, height: '0.5px', background: 'rgba(201,168,76,0.25)' }} />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+              {[hourEntries.slice(0, halfHours), hourEntries.slice(halfHours)].map(
+                (col, ci) => (
+                  <div key={ci}>
+                    {col.map(([day, hours]) => (
+                      <div
+                        key={day}
+                        className="flex justify-between items-baseline py-3.5"
+                        style={{ borderBottom: '0.5px solid rgba(201,168,76,0.1)' }}
+                      >
+                        <span className="text-[0.68rem] tracking-[0.2em] uppercase text-[#D4C9B2]">
+                          {day}
+                        </span>
+                        {hours?.toLowerCase() === 'closed' ? (
+                          <span className="text-[0.65rem] tracking-[0.2em] uppercase text-[rgba(255,255,255,0.2)]">
+                            Closed
+                          </span>
+                        ) : (
+                          <span className="salon-serif text-[0.95rem] text-[#C9A84C]">
+                            {hours}
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )
+              )}
             </div>
           </div>
-        </section>
+        </div>
       )}
 
-      {/* Operating Hours Section */}
-      {operatingHours && Object.values(operatingHours).some(hour => hour) && (
-        <section className="py-16 px-4">
-          <div className="max-w-4xl mx-auto">
-            <h3 className="text-4xl font-bold text-center text-gray-900 mb-12">
-              Opening Hours
-            </h3>
-            <Card className="p-8 bg-white border-pink-100">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {Object.entries(operatingHours).map(([day, hours]) => {
-                  if (!hours) return null;
-                  return (
-                    <div key={day} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0">
-                      <span className="font-medium text-gray-900 capitalize">
-                        {day}
-                      </span>
-                      <span className="text-pink-600 font-medium">
-                        {hours}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </Card>
-          </div>
-        </section>
-      )}
+      {/* CONTACT */}
+      <section className="px-12 py-24 text-center">
+        <p className="text-[0.68rem] tracking-[0.3em] uppercase text-[#D4C9B2] mb-3">
+          We'd love to hear from you
+        </p>
+        <h2
+          className="salon-serif font-light text-[#F5F0E8] mb-16"
+          style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }}
+        >
+          Book Your <em className="text-[#C9A84C]">Experience</em>
+        </h2>
 
-      {/* Contact Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-pink-600 to-purple-600">
-        <div className="max-w-4xl mx-auto text-center">
-          <h3 className="text-4xl font-bold text-white mb-8">
-            Get In Touch
-          </h3>
-          <p className="text-pink-100 mb-12 text-lg">
-            Ready to look and feel your best? Contact us today!
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            {contact?.phone && (
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">📞</span>
-                </div>
-                <h4 className="text-white font-semibold mb-2">Call Us</h4>
-                <p className="text-pink-100">{contact.phone}</p>
-                <Button 
-                  onClick={() => handleContactClick('phone')}
-                  className="mt-3 bg-white text-pink-600 hover:bg-pink-50"
-                >
-                  Call Now
-                </Button>
-              </div>
-            )}
-            
-            {contact?.email && (
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">✉️</span>
-                </div>
-                <h4 className="text-white font-semibold mb-2">Email Us</h4>
-                <p className="text-pink-100">{contact.email}</p>
-                <Button 
-                  onClick={() => handleContactClick('email')}
-                  className="mt-3 bg-white text-pink-600 hover:bg-pink-50"
-                >
-                  Send Email
-                </Button>
-              </div>
-            )}
-            
-            {contact?.address && (
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">📍</span>
-                </div>
-                <h4 className="text-white font-semibold mb-2">Visit Us</h4>
-                <p className="text-pink-100">{contact.address}</p>
-                <Button 
-                  onClick={() => contact.address && window.open(`https://maps.google.com/?q=${encodeURIComponent(contact.address)}`, '_blank')}
-                  className="mt-3 bg-white text-pink-600 hover:bg-pink-50"
-                >
-                  Get Directions
-                </Button>
-              </div>
-            )}
-          </div>
-
-          {/* Social Links */}
-          {contact?.socialLinks && (
-            <div className="flex justify-center gap-4">
-              {contact.socialLinks.instagram && (
-                <Button
-                  onClick={() => handleSocialClick('instagram')}
-                  className="bg-white/20 hover:bg-white/30 text-white border-white/30"
-                >
-                  📷 Instagram
-                </Button>
-              )}
-              {contact.socialLinks.facebook && (
-                <Button
-                  onClick={() => handleSocialClick('facebook')}
-                  className="bg-white/20 hover:bg-white/30 text-white border-white/30"
-                >
-                  📘 Facebook
-                </Button>
-              )}
-              {contact.socialLinks.linkedin && (
-                <Button
-                  onClick={() => handleSocialClick('linkedin')}
-                  className="bg-white/20 hover:bg-white/30 text-white border-white/30"
-                >
-                  💼 LinkedIn
-                </Button>
-              )}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto mb-10">
+          {contact?.phone && (
+            <div
+              className="salon-contact-card p-8 text-center transition-all duration-300"
+              style={{ border: '0.5px solid rgba(201,168,76,0.15)' }}
+            >
+              <div className="text-2xl mb-4 text-[#C9A84C]">📞</div>
+              <div className="text-[0.58rem] tracking-[0.35em] uppercase text-[#D4C9B2] mb-2">Call Us</div>
+              <div className="salon-serif text-[0.9rem] text-[#F5F0E8] mb-4">{contact.phone}</div>
+              <button
+                onClick={() => handleContactClick('phone')}
+                className="salon-btn-ghost text-[#C9A84C] text-[0.6rem] tracking-[0.2em] uppercase px-4 py-1.5 bg-transparent"
+                style={{ border: '0.5px solid rgba(201,168,76,0.4)' }}
+              >
+                Call Now
+              </button>
+            </div>
+          )}
+          {contact?.email && (
+            <div
+              className="salon-contact-card p-8 text-center transition-all duration-300"
+              style={{ border: '0.5px solid rgba(201,168,76,0.15)' }}
+            >
+              <div className="text-2xl mb-4 text-[#C9A84C]">✉</div>
+              <div className="text-[0.58rem] tracking-[0.35em] uppercase text-[#D4C9B2] mb-2">Email Us</div>
+              <div className="salon-serif text-[0.9rem] text-[#F5F0E8] mb-4">{contact.email}</div>
+              <button
+                onClick={() => handleContactClick('email')}
+                className="salon-btn-ghost text-[#C9A84C] text-[0.6rem] tracking-[0.2em] uppercase px-4 py-1.5 bg-transparent"
+                style={{ border: '0.5px solid rgba(201,168,76,0.4)' }}
+              >
+                Send Email
+              </button>
+            </div>
+          )}
+          {contact?.address && (
+            <div
+              className="salon-contact-card p-8 text-center transition-all duration-300"
+              style={{ border: '0.5px solid rgba(201,168,76,0.15)' }}
+            >
+              <div className="text-2xl mb-4 text-[#C9A84C]">◉</div>
+              <div className="text-[0.58rem] tracking-[0.35em] uppercase text-[#D4C9B2] mb-2">Visit Us</div>
+              <div className="salon-serif text-[0.9rem] text-[#F5F0E8] mb-4">{contact.address}</div>
+              <button
+                onClick={() =>
+                  contact.address &&
+                  window.open(
+                    `https://maps.google.com/?q=${encodeURIComponent(contact.address)}`,
+                    '_blank'
+                  )
+                }
+                className="salon-btn-ghost text-[#C9A84C] text-[0.6rem] tracking-[0.2em] uppercase px-4 py-1.5 bg-transparent"
+                style={{ border: '0.5px solid rgba(201,168,76,0.4)' }}
+              >
+                Get Directions
+              </button>
             </div>
           )}
         </div>
+
+        {/* Social links */}
+        {contact?.socialLinks && (
+          <div className="flex justify-center gap-3 flex-wrap">
+            {contact.socialLinks.instagram && (
+              <button
+                onClick={() => handleSocialClick('instagram')}
+                className="salon-social-btn text-[#D4C9B2] text-[0.6rem] tracking-[0.25em] uppercase px-6 py-2.5 bg-transparent transition-all duration-300"
+                style={{ border: '0.5px solid rgba(201,168,76,0.3)' }}
+              >
+                ◈ Instagram
+              </button>
+            )}
+            {contact.socialLinks.facebook && (
+              <button
+                onClick={() => handleSocialClick('facebook')}
+                className="salon-social-btn text-[#D4C9B2] text-[0.6rem] tracking-[0.25em] uppercase px-6 py-2.5 bg-transparent transition-all duration-300"
+                style={{ border: '0.5px solid rgba(201,168,76,0.3)' }}
+              >
+                ◈ Facebook
+              </button>
+            )}
+            {contact.socialLinks.linkedin && (
+              <button
+                onClick={() => handleSocialClick('linkedin')}
+                className="salon-social-btn text-[#D4C9B2] text-[0.6rem] tracking-[0.25em] uppercase px-6 py-2.5 bg-transparent transition-all duration-300"
+                style={{ border: '0.5px solid rgba(201,168,76,0.3)' }}
+              >
+                ◈ LinkedIn
+              </button>
+            )}
+          </div>
+        )}
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <h4 className="text-2xl font-bold mb-2">{businessName}</h4>
-          {tagline && <p className="text-gray-400 mb-4">{tagline}</p>}
-          <p className="text-gray-500 text-sm">
-            © 2024 {businessName}. All rights reserved.
-          </p>
+      {/* FOOTER */}
+      <footer
+        className="flex items-center justify-between flex-wrap gap-4 px-12 py-10"
+        style={{ borderTop: '0.5px solid rgba(201,168,76,0.2)', background: '#0A0A0A' }}
+      >
+        <div>
+          <div className="salon-serif salon-gold text-xl font-light tracking-[0.1em]">
+            {businessName}
+          </div>
+          {tagline && (
+            <div className="text-[0.6rem] tracking-[0.2em] uppercase mt-1" style={{ color: 'rgba(255,255,255,0.25)' }}>
+              {tagline}
+            </div>
+          )}
+        </div>
+        <div className="text-[0.6rem] tracking-[0.2em] uppercase" style={{ color: 'rgba(255,255,255,0.2)' }}>
+          © 2024 {businessName}. All rights reserved.
         </div>
       </footer>
     </div>
