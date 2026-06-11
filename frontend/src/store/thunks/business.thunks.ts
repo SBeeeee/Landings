@@ -23,3 +23,25 @@ export const getMyBusinessThunk = createAsyncThunk<Business, void>(
     }
   }
 );
+
+export const updateBusinessThunk = createAsyncThunk<
+  Business,
+  Partial<BusinessIntakeInput>
+>('business/updateBusiness', async (data, { rejectWithValue }) => {
+  try {
+    return await businessService.updateBusiness(data);
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
+export const getPublicBusinessThunk = createAsyncThunk<
+  Business,
+  string
+>('business/getPublicBusiness', async (username, { rejectWithValue }) => {
+  try {
+    return await businessService.getPublicBusiness(username);
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
