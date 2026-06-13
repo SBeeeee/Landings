@@ -6,6 +6,7 @@ import {
   getMyBusinessThunk,
   updateBusinessThunk,
   getPublicBusinessThunk,
+  publishBusinessThunk,
 } from '../store/thunks/business.thunks';
 import type { BusinessIntakeInput } from '../services/business.service';
 import { clearBusinessError, clearPublicBusinessError, clearPublicBusiness } from '../store/slices/businessSlice';
@@ -24,6 +25,14 @@ export const useBusiness = () => {
     dispatch(clearPublicBusiness());
   }, [dispatch]);
 
+  const fetchMyBusiness = useCallback(() => {
+    return dispatch(getMyBusinessThunk());
+  }, [dispatch]);
+
+  const publishBusiness = useCallback(() => {
+    return dispatch(publishBusinessThunk());
+  }, [dispatch]);
+
   return {
     business,
     publicBusiness,
@@ -36,8 +45,9 @@ export const useBusiness = () => {
       dispatch(submitBusinessIntakeThunk(data)),
     updateBusiness: (data: Partial<BusinessIntakeInput>) =>
       dispatch(updateBusinessThunk(data)),
-    fetchMyBusiness: () => dispatch(getMyBusinessThunk()),
+    fetchMyBusiness,
     fetchPublicBusiness,
+    publishBusiness,
     clearError: () => dispatch(clearBusinessError()),
     clearPublicError: () => dispatch(clearPublicBusinessError()),
     clearPublicBusiness: clearPublicBusinessData,
