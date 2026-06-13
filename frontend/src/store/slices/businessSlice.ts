@@ -5,6 +5,7 @@ import {
   getMyBusinessThunk,
   updateBusinessThunk,
   getPublicBusinessThunk,
+  publishBusinessThunk,
 } from '../thunks/business.thunks';
 
 interface BusinessState {
@@ -83,6 +84,18 @@ const businessSlice = createSlice({
       .addCase(updateBusinessThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) ?? 'Failed to update business data';
+      })
+      .addCase(publishBusinessThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(publishBusinessThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.business = action.payload;
+      })
+      .addCase(publishBusinessThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) ?? 'Failed to publish business';
       })
       .addCase(getPublicBusinessThunk.pending, (state) => {
         state.publicLoading = true;

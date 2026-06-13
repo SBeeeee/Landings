@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
 import Select from '@/components/ui/Select';
@@ -73,6 +73,8 @@ export default function BusinessSetupPage() {
     { name: '', description: '', price: '', duration: '' }
   ]);
 
+  const initRef = useRef(false);
+
   useEffect(() => {
     fetchMyBusiness();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,11 +82,13 @@ export default function BusinessSetupPage() {
 
   useEffect(() => {
     if (!business) {
-      if (user?.username) {
-        setFormData((prev) => ({ ...prev, username: prev.username || user.username }));
+      if (user?.username && formData.username !== user.username) {
+        setFormData((prev) => ({ ...prev, username: user.username }));
       }
       return;
     }
+
+    if (initRef.current) return;
 
     setFormData((prev) => ({
       ...prev,
@@ -125,7 +129,8 @@ export default function BusinessSetupPage() {
       !!business.contact?.phone &&
         business.contact?.phone === business.contact?.whatsapp
     );
-  }, [business]);
+    initRef.current = true;
+  }, [business, user?.username, formData.username]);
 
   const handleChange = (
     key: keyof typeof formData,

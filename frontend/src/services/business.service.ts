@@ -86,6 +86,11 @@ const businessService = {
     const res = await api.get(`/business/public/${username}`);
     return res.data.business;
   },
+
+  publishBusiness: async (): Promise<Business> => {
+    const res = await api.patch('/business/me/publish');
+    return res.data.business;
+  },
 };
 
 export default businessService;

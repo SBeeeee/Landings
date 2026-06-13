@@ -45,3 +45,14 @@ export const getPublicBusinessThunk = createAsyncThunk<
     return rejectWithValue(error.message);
   }
 });
+
+export const publishBusinessThunk = createAsyncThunk<Business, void>(
+  'business/publishBusiness',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await businessService.publishBusiness();
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
