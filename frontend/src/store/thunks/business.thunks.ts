@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import businessService from '../../services/business.service';
-import type { Business, BusinessIntakeInput } from '../../services/business.service';
+import type { Business, BusinessIntakeInput, GalleryImage } from '../../services/business.service';
 
 export const submitBusinessIntakeThunk = createAsyncThunk<
   Business,
@@ -41,6 +41,29 @@ export const getPublicBusinessThunk = createAsyncThunk<
 >('business/getPublicBusiness', async (username, { rejectWithValue }) => {
   try {
     return await businessService.getPublicBusiness(username);
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
+export const uploadGalleryImageThunk = createAsyncThunk<
+  GalleryImage,
+  File
+>('business/uploadGalleryImage', async (file, { rejectWithValue }) => {
+  try {
+    return await businessService.uploadGalleryImage(file);
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
+export const deleteGalleryImageThunk = createAsyncThunk<
+  string,
+  string
+>('business/deleteGalleryImage', async (publicId, { rejectWithValue }) => {
+  try {
+    await businessService.deleteGalleryImage(publicId);
+    return publicId;
   } catch (error: any) {
     return rejectWithValue(error.message);
   }

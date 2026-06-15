@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { connectDB } from "./lib/database";
 import userRoutes from './routes/user.routes';
 import businessRoutes from './routes/business.routes';
+import galleryRoutes from './routes/gallery.routes';
 import passport from './config/passport';
 import {
   enforceCsrf,
@@ -39,6 +40,7 @@ app.get('/health', (_req, res) => {
 
 app.use('/api/users', userRoutes);
 app.use('/api/business', businessRoutes);
+app.use('/api/gallery', galleryRoutes);
 
 const PORT = process.env['PORT'] || 5000;
 

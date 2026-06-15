@@ -46,7 +46,10 @@ const businessSchema = new Schema({
     }
   },
   
-  gallery: [String],
+  gallery: [{
+    url: { type: String },
+    publicId: { type: String }
+  }],
   
   operatingHours: {
     monday: String,
