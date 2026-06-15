@@ -103,6 +103,11 @@ const businessService = {
   deleteGalleryImage: async (publicId: string): Promise<void> => {
     await api.delete(`/gallery/images/${publicId}`);
   },
+  publishBusiness: async (): Promise<Business> => {
+    const res = await api.patch('/business/me/publish');
+    return res.data.business;
+
+  },
 };
 
 export default businessService;
