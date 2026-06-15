@@ -5,6 +5,8 @@ import { useParams } from 'next/navigation';
 import { useBusiness } from '@/hooks/useBusiness';
 import SalonTemplate from '@/components/templates/SalonTemplate';
 import TutorTemplate from '@/components/templates/TutorTemplate';
+import GymTemplate from '@/components/templates/GymTemplate';
+import RestaurantTemplate from '@/components/templates/RestaurantTemplate';
 import LoadingSpinner from '@/components/ui/Spinner';
 
 export default function PublicBusinessPage() {
@@ -64,6 +66,14 @@ export default function PublicBusinessPage() {
 
   if (publicBusiness.businessType === 'tutor') {
     return <TutorTemplate business={publicBusiness} />;
+  }
+
+  if (publicBusiness.businessType === 'gym') {
+    return <GymTemplate business={publicBusiness} />;
+  }
+
+  if (publicBusiness.businessType === 'restaurant') {
+    return <RestaurantTemplate business={publicBusiness} />;
   }
 
   // Fallback for other business types (will be implemented later)
