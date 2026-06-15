@@ -6,12 +6,9 @@ import {
   getMyBusinessThunk,
   updateBusinessThunk,
   getPublicBusinessThunk,
-<<<<<<< HEAD
   uploadGalleryImageThunk,
   deleteGalleryImageThunk,
-=======
   publishBusinessThunk,
->>>>>>> 8a7ebd65346305053908bb81fafb18a0d58c1856
 } from '../store/thunks/business.thunks';
 import type { BusinessIntakeInput } from '../services/business.service';
 import { clearBusinessError, clearPublicBusinessError, clearPublicBusiness } from '../store/slices/businessSlice';
@@ -54,12 +51,9 @@ export const useBusiness = () => {
       dispatch(updateBusinessThunk(data)),
     fetchMyBusiness,
     fetchPublicBusiness,
-<<<<<<< HEAD
     uploadImage: (file: File) => dispatch(uploadGalleryImageThunk(file)),
     deleteImage: (publicId: string) => dispatch(deleteGalleryImageThunk(publicId)),
-=======
     publishBusiness,
->>>>>>> 8a7ebd65346305053908bb81fafb18a0d58c1856
     clearError: () => dispatch(clearBusinessError()),
     clearPublicError: () => dispatch(clearPublicBusinessError()),
     clearPublicBusiness: clearPublicBusinessData,
