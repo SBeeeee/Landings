@@ -530,7 +530,11 @@ export default function BusinessSetupPage() {
               ))}
             </div>
           </div>
-
+          {hasSubmittedSite && (
+          <div className="space-y-4">
+            <GalleryManager />
+          </div>
+        )}
           {/* Global Submit */}
           <div className="pt-8 border-t border-white/10 flex items-center justify-between">
             <p className="text-sm text-gray-500">
@@ -587,22 +591,7 @@ export default function BusinessSetupPage() {
             </div>
           </div>
         </div>
-<<<<<<< HEAD
-
-        {/* Gallery Section */}
-        {hasSubmittedSite && (
-          <div className="space-y-4">
-            <GalleryManager />
-          </div>
-        )}
-
-        <Button type="submit" size="lg" disabled={loading}>
-          {loading ? 'Saving...' : hasSubmittedSite ? 'Update Business Data' : 'Save Business Data'}
-        </Button>
-      </form>
-=======
       )}
->>>>>>> 8a7ebd65346305053908bb81fafb18a0d58c1856
     </div>
   );
 }
