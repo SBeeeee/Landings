@@ -37,3 +37,7 @@ Thumbs.db
 # Misc
 .nyc_output
 coverage/
+
+.commandcode
+auth-backend
+certificate-generator

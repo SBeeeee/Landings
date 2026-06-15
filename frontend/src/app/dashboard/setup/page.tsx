@@ -6,6 +6,7 @@ import Textarea from '@/components/ui/Textarea';
 import Select from '@/components/ui/Select';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
+import GalleryManager from '@/components/dashboard/GalleryManager';
 import { useBusiness } from '@/hooks/useBusiness';
 import { useAuth } from '@/hooks/useAuth';
 import SalonTemplate from '@/components/templates/SalonTemplate';
@@ -586,7 +587,22 @@ export default function BusinessSetupPage() {
             </div>
           </div>
         </div>
+<<<<<<< HEAD
+
+        {/* Gallery Section */}
+        {hasSubmittedSite && (
+          <div className="space-y-4">
+            <GalleryManager />
+          </div>
+        )}
+
+        <Button type="submit" size="lg" disabled={loading}>
+          {loading ? 'Saving...' : hasSubmittedSite ? 'Update Business Data' : 'Save Business Data'}
+        </Button>
+      </form>
+=======
       )}
+>>>>>>> 8a7ebd65346305053908bb81fafb18a0d58c1856
     </div>
   );
 }

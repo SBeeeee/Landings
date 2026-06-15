@@ -1,10 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { Business } from '../../services/business.service';
+import type { Business, GalleryImage } from '../../services/business.service';
 import {
   submitBusinessIntakeThunk,
   getMyBusinessThunk,
   updateBusinessThunk,
   getPublicBusinessThunk,
+  uploadGalleryImageThunk,
+  deleteGalleryImageThunk,
   publishBusinessThunk,
 } from '../thunks/business.thunks';
 
@@ -16,6 +18,8 @@ interface BusinessState {
   error: string | null;
   publicError: string | null;
   initialized: boolean;
+  uploading: boolean;
+  uploadError: string | null;
 }
 
 const initialState: BusinessState = {
@@ -26,6 +30,8 @@ const initialState: BusinessState = {
   error: null,
   publicError: null,
   initialized: false,
+  uploading: false,
+  uploadError: null,
 };
 
 const businessSlice = createSlice({
@@ -34,6 +40,7 @@ const businessSlice = createSlice({
   reducers: {
     clearBusinessError(state) {
       state.error = null;
+      state.uploadError = null;
     },
     clearPublicBusinessError(state) {
       state.publicError = null;
@@ -109,6 +116,36 @@ const businessSlice = createSlice({
         state.publicLoading = false;
         state.publicBusiness = null;
         state.publicError = (action.payload as string) ?? 'Business not found';
+      })
+      .addCase(uploadGalleryImageThunk.pending, (state) => {
+        state.uploading = true;
+        state.uploadError = null;
+      })
+      .addCase(uploadGalleryImageThunk.fulfilled, (state, action) => {
+        state.uploading = false;
+        if (state.business) {
+          state.business.gallery = [...(state.business.gallery ?? []), action.payload];
+        }
+      })
+      .addCase(uploadGalleryImageThunk.rejected, (state, action) => {
+        state.uploading = false;
+        state.uploadError = (action.payload as string) ?? 'Failed to upload image';
+      })
+      .addCase(deleteGalleryImageThunk.pending, (state) => {
+        state.uploading = true;
+        state.uploadError = null;
+      })
+      .addCase(deleteGalleryImageThunk.fulfilled, (state, action) => {
+        state.uploading = false;
+        if (state.business?.gallery) {
+          state.business.gallery = state.business.gallery.filter(
+            (img: GalleryImage) => img.publicId !== action.payload
+          );
+        }
+      })
+      .addCase(deleteGalleryImageThunk.rejected, (state, action) => {
+        state.uploading = false;
+        state.uploadError = (action.payload as string) ?? 'Failed to delete image';
       });
   },
 });

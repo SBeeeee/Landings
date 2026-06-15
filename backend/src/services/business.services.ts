@@ -32,6 +32,11 @@ export interface OperatingHours {
   sunday?: string;
 }
 
+export interface GalleryImage {
+  url: string;
+  publicId: string;
+}
+
 export interface CreateBusinessInput {
   username: string;
   businessName: string;
@@ -40,7 +45,7 @@ export interface CreateBusinessInput {
   description?: string;
   services?: ServiceItem[];
   contact?: ContactInput;
-  gallery?: string[];
+  gallery?: GalleryImage[];
   operatingHours?: OperatingHours;
   theme?: string;
 }
@@ -88,7 +93,7 @@ const sanitizeIntake = (data: IntakeBusinessInput): IntakeBusinessInput => ({
           : undefined,
       }
     : undefined,
-  gallery: data.gallery?.map((item) => sanitizeString(item) || '').filter(Boolean),
+  gallery: data.gallery?.filter((item) => item.url && item.publicId),
   operatingHours: data.operatingHours
     ? {
         monday: sanitizeString(data.operatingHours.monday),

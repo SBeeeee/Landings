@@ -50,6 +50,11 @@ export interface BusinessIntakeInput {
   operatingHours?: OperatingHours;
 }
 
+export interface GalleryImage {
+  url: string;
+  publicId: string;
+}
+
 export interface Business {
   _id: string;
   userId: string;
@@ -61,6 +66,7 @@ export interface Business {
   services?: ServiceItem[];
   contact?: ContactInput;
   operatingHours?: OperatingHours;
+  gallery?: GalleryImage[];
   isPublished: boolean;
   createdAt: string;
   updatedAt: string;
@@ -87,9 +93,20 @@ const businessService = {
     return res.data.business;
   },
 
+  uploadGalleryImage: async (file: File): Promise<GalleryImage> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    const res = await api.post('/gallery/images', formData);
+    return res.data.image;
+  },
+
+  deleteGalleryImage: async (publicId: string): Promise<void> => {
+    await api.delete(`/gallery/images/${publicId}`);
+  },
   publishBusiness: async (): Promise<Business> => {
     const res = await api.patch('/business/me/publish');
     return res.data.business;
+
   },
 };
 
