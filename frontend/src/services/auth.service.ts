@@ -1,6 +1,7 @@
 import api from '../utils/api';
 
 export interface RegisterInput {
+  name: string;
   username: string;
   email: string;
   password: string;
@@ -13,6 +14,7 @@ export interface LoginInput {
 
 export interface User {
   _id?: string;
+  name?: string;
   username: string;
   email: string;
   createdAt: string;

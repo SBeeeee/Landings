@@ -38,6 +38,10 @@ passport.use(
         let user = await User.findOne({ googleId: profile.id });
 
         if (user) {
+          if (!user.name && profile.displayName) {
+            user.name = profile.displayName || profile.name?.givenName || "";
+            await user.save();
+          }
           return done(null, user);
         }
 
@@ -48,6 +52,9 @@ passport.use(
             if (user) {
                 // Link googleId to existing user
                 user.googleId = profile.id;
+                if (!user.name && profile.displayName) {
+                  user.name = profile.displayName || profile.name?.givenName || "";
+                }
                 await user.save();
                 return done(null, user);
             }
@@ -61,6 +68,7 @@ passport.use(
 
         const newUser = await User.create({
           googleId: profile.id,
+          name: profile.displayName || profile.name?.givenName || "",
           username: username,
           email: email || `${profile.id}@google.com`,
           // Password is not required since googleId is present

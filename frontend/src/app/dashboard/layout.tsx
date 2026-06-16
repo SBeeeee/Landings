@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, createContext, useContext } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
@@ -49,6 +49,19 @@ export default function DashboardLayout({
   const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const [greeting, setGreeting] = useState('Welcome back,');
+
+  useEffect(() => {
+    const greetings = [
+      'Welcome back,',
+      'Hello,',
+      'Good to see you,',
+      'Greetings,',
+      'Hi there,'
+    ];
+    setGreeting(greetings[Math.floor(Math.random() * greetings.length)]);
+  }, []);
+
   const handleLogout = async () => {
     await logout();
     router.replace('/login');
@@ -89,8 +102,8 @@ export default function DashboardLayout({
               <UserIcon />
             ) : (
               <div className="overflow-hidden">
-                <p className="text-xs uppercase tracking-widest text-gray-500">Logged in as</p>
-                <p className="mt-2 text-lg font-semibold text-white truncate">{user?.username}</p>
+                <p className="text-xs uppercase tracking-widest text-gray-500">{greeting}</p>
+                <p className="mt-2 text-lg font-semibold text-white truncate">{user?.name || user?.username}</p>
                 <p className="truncate text-sm text-gray-400">{user?.email}</p>
               </div>
             )}
@@ -113,19 +126,16 @@ export default function DashboardLayout({
               <SetupIcon />
               {!isCollapsed && <span>Business Setup</span>}
             </Link>
-          </nav>
-
-          <div className="mt-6 md:mt-auto md:pt-6">
             <Button
               variant="ghost"
-              className={`w-full ${isCollapsed ? 'justify-center px-0' : 'justify-start'}`}
+              className={`w-full mt-2 ${isCollapsed ? 'justify-center px-0' : 'justify-start'} text-gray-400 hover:text-white hover:bg-white/10`}
               onClick={handleLogout}
               title="Logout"
             >
               <LogoutIcon />
               {!isCollapsed && <span className="ml-3 truncate">Logout</span>}
             </Button>
-          </div>
+          </nav>
         </aside>
 
         <main className="flex-1 p-4 transition-all duration-300 sm:p-6 md:p-10">{children}</main>

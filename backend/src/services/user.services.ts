@@ -5,6 +5,7 @@ import {generateToken} from "../utils/token"
 
 
 interface RegisterInput {
+  name: string;
   username: string;
   email: string;
   password: string;
@@ -22,6 +23,7 @@ interface LoginInput {
 ========================= */
 
 export const registerUser = async ({
+  name,
   username,
   email,
   password,
@@ -37,10 +39,10 @@ export const registerUser = async ({
 
   // 3️⃣ Create user
   const user = await User.create({
+    name,
     username,
     email,
     password: hashedPassword,
-    
   });
 
   // 4️⃣ Generate token
