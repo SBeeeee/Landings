@@ -279,23 +279,26 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
       {/* SERVICES/SUBJECTS */}
       {services.length > 0 && (
         <section className="py-16 lg:py-24 px-4 sm:px-8 lg:px-12 bg-[#F8FAFC] relative overflow-hidden">
-          {gallery && gallery.length > 2 && (
-             <div className="absolute top-8 right-8 lg:right-24 w-40 lg:w-64 transform rotate-6 hover:rotate-0 transition-transform duration-500 hidden md:block z-0 opacity-80 hover:opacity-100">
-                <div className="p-2 lg:p-3 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100">
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-                    <img src={gallery[2].url} alt="Tutoring Snapshot" className="w-full h-full object-cover" />
-                  </div>
-                </div>
-             </div>
-          )}
           <div className="max-w-6xl mx-auto relative z-10">
-            <div className="mb-16 text-center">
-              <h3 className="tutor-serif text-3xl md:text-4xl font-semibold mb-4 text-[#0F172A]">
-                Subjects & Courses
-              </h3>
-              <p className="text-[#64748B] max-w-xl mx-auto">
-                Tailored educational programs designed to help you achieve your academic goals.
-              </p>
+            <div className="mb-16 flex flex-col md:flex-row justify-between items-center md:items-end gap-8 text-center md:text-left">
+              <div>
+                <h3 className="tutor-serif text-3xl md:text-4xl font-semibold mb-4 text-[#0F172A]">
+                  Subjects & Courses
+                </h3>
+                <p className="text-[#64748B] max-w-lg mx-auto md:mx-0">
+                  Tailored educational programs designed to help you achieve your academic goals.
+                </p>
+              </div>
+              
+              {gallery && gallery.length > 2 && (
+                 <div className="w-48 lg:w-64 transform rotate-6 hover:rotate-0 transition-transform duration-500 hidden md:block z-0 opacity-80 hover:opacity-100 flex-shrink-0">
+                    <div className="p-2 lg:p-3 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100">
+                      <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
+                        <img src={gallery[2].url} alt="Tutoring Snapshot" className="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                 </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
