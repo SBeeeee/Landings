@@ -167,7 +167,7 @@ export const updateBusiness = async (
   const business = await Business.findOneAndUpdate(
     { userId },
     { ...data, updatedAt: new Date() },
-    { new: true, runValidators: true }
+    { returnDocument: 'after', runValidators: true }
   );
   if (!business) {
     throw new Error('No business page found');

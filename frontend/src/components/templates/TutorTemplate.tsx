@@ -13,6 +13,7 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
     services = [],
     contact,
     operatingHours,
+    gallery = [],
   } = business;
 
   const handleContactClick = (type: 'phone' | 'whatsapp' | 'email') => {
@@ -96,7 +97,7 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
       `}</style>
 
       {/* HEADER */}
-      <header className="sticky top-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 tutor-header-blur">
+      <header className="sticky top-0 z-50 flex items-center justify-between px-4 sm:px-8 lg:px-12 py-4 tutor-header-blur">
         <div>
           <h1 className="tutor-serif text-xl md:text-2xl font-semibold tracking-tight text-[#0F172A]">
             {businessName}
@@ -123,7 +124,7 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
       </header>
 
       {/* HERO SECTION */}
-      <section className="relative pt-16 pb-20 md:pt-24 md:pb-32 px-6 md:px-12 overflow-hidden tutor-pattern">
+      <section className="relative pt-16 pb-16 lg:pt-24 lg:pb-32 px-4 sm:px-8 lg:px-12 overflow-hidden tutor-pattern">
         {/* Decorative background blobs */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-blob pointer-events-none"></div>
         <div className="absolute bottom-0 left-[-100px] w-[400px] h-[400px] bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-blob animation-delay-2000 pointer-events-none"></div>
@@ -177,14 +178,22 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
             {/* Right Column: Illustration */}
             <div className="relative w-full max-w-lg mx-auto lg:max-w-none lg:h-[500px] flex items-center justify-center">
               <div className="absolute inset-0 bg-gradient-to-tr from-blue-50 to-indigo-50 rounded-full filter blur-2xl opacity-70 transform scale-90"></div>
-              <Image 
-                src="/tutor1.svg" 
-                alt="Tutoring Illustration" 
-                width={600} 
-                height={500} 
-                className="relative z-10 w-full h-auto object-contain drop-shadow-2xl hover:scale-[1.02] transition-transform duration-500"
-                priority
-              />
+              {gallery && gallery.length > 0 ? (
+                <img 
+                  src={gallery[0].url} 
+                  alt="Tutoring" 
+                  className="relative z-10 w-full h-[400px] md:h-[500px] object-cover rounded-3xl shadow-2xl border-4 border-white hover:scale-[1.02] transition-transform duration-500"
+                />
+              ) : (
+                <Image 
+                  src="/tutor1.svg" 
+                  alt="Tutoring Illustration" 
+                  width={600} 
+                  height={500} 
+                  className="relative z-10 w-full h-auto object-contain drop-shadow-2xl hover:scale-[1.02] transition-transform duration-500"
+                  priority
+                />
+              )}
               
               {/* Floating detail cards */}
               <div className="absolute top-10 -left-6 md:-left-12 bg-white p-4 rounded-2xl shadow-xl border border-blue-50 z-20 animate-bounce" style={{ animationDuration: '3s' }}>
@@ -217,18 +226,26 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
       </section>
 
       {/* WHY CHOOSE ME SECTION */}
-      <section className="py-20 px-6 md:px-12 bg-white border-y border-[#E2E8F0]">
+      <section className="py-16 lg:py-20 px-4 sm:px-8 lg:px-12 bg-white border-y border-[#E2E8F0]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="order-2 lg:order-1 relative flex justify-center">
               <div className="absolute inset-0 bg-blue-50 rounded-full filter blur-3xl opacity-50"></div>
-              <Image 
-                src="/tutor2.svg" 
-                alt="Learning Philosophy" 
-                width={500} 
-                height={400} 
-                className="relative z-10 w-full max-w-md h-auto drop-shadow-xl"
-              />
+              {gallery && gallery.length > 1 ? (
+                <img 
+                  src={gallery[1].url} 
+                  alt="Learning Philosophy" 
+                  className="relative z-10 w-full max-w-md h-[400px] object-cover rounded-3xl shadow-2xl border-4 border-white rotate-2 hover:rotate-0 transition-transform duration-500"
+                />
+              ) : (
+                <Image 
+                  src="/tutor2.svg" 
+                  alt="Learning Philosophy" 
+                  width={500} 
+                  height={400} 
+                  className="relative z-10 w-full max-w-md h-auto drop-shadow-xl"
+                />
+              )}
             </div>
             
             <div className="order-1 lg:order-2 text-center lg:text-left">
@@ -261,15 +278,27 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
 
       {/* SERVICES/SUBJECTS */}
       {services.length > 0 && (
-        <section className="py-24 px-6 md:px-12 bg-[#F8FAFC]">
-          <div className="max-w-6xl mx-auto">
-            <div className="mb-16 text-center">
-              <h3 className="tutor-serif text-3xl md:text-4xl font-semibold mb-4 text-[#0F172A]">
-                Subjects & Courses
-              </h3>
-              <p className="text-[#64748B] max-w-xl mx-auto">
-                Tailored educational programs designed to help you achieve your academic goals.
-              </p>
+        <section className="py-16 lg:py-24 px-4 sm:px-8 lg:px-12 bg-[#F8FAFC] relative overflow-hidden">
+          <div className="max-w-6xl mx-auto relative z-10">
+            <div className="mb-16 flex flex-col md:flex-row justify-between items-center md:items-end gap-8 text-center md:text-left">
+              <div>
+                <h3 className="tutor-serif text-3xl md:text-4xl font-semibold mb-4 text-[#0F172A]">
+                  Subjects & Courses
+                </h3>
+                <p className="text-[#64748B] max-w-lg mx-auto md:mx-0">
+                  Tailored educational programs designed to help you achieve your academic goals.
+                </p>
+              </div>
+              
+              {gallery && gallery.length > 2 && (
+                 <div className="w-48 lg:w-64 transform rotate-6 hover:rotate-0 transition-transform duration-500 hidden md:block z-0 opacity-80 hover:opacity-100 flex-shrink-0">
+                    <div className="p-2 lg:p-3 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100">
+                      <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
+                        <img src={gallery[2].url} alt="Tutoring Snapshot" className="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                 </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -309,8 +338,17 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
       )}
 
       {/* SCHEDULE & CONTACT DUAL SECTION */}
-      <section className="py-24 px-6 md:px-12 bg-white border-t border-[#E2E8F0]">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+      <section className="py-16 lg:py-24 px-4 sm:px-8 lg:px-12 bg-white border-t border-[#E2E8F0] relative overflow-hidden">
+        {gallery && gallery.length > 3 && (
+           <div className="absolute top-20 left-4 lg:left-12 w-32 lg:w-48 transform -rotate-6 hover:rotate-0 transition-transform duration-500 hidden xl:block z-0 opacity-40 hover:opacity-100">
+              <div className="p-2 bg-white rounded-xl shadow-lg border border-slate-100">
+                <div className="relative aspect-[3/4] overflow-hidden rounded-lg">
+                  <img src={gallery[3].url} alt="Contact Snapshot" className="w-full h-full object-cover" />
+                </div>
+              </div>
+           </div>
+        )}
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 relative z-10">
           
           {/* Schedule */}
           {hourEntries.length > 0 && (
@@ -421,7 +459,7 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-8 px-6 md:px-12 bg-white border-t border-[#E2E8F0] text-center md:text-left">
+      <footer className="py-8 px-4 sm:px-8 lg:px-12 bg-white border-t border-[#E2E8F0] text-center md:text-left">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
             <h2 className="tutor-serif text-lg font-semibold text-[#0F172A]">{businessName}</h2>
