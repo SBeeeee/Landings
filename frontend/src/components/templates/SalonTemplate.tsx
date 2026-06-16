@@ -14,6 +14,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
     services = [],
     contact,
     operatingHours,
+    gallery = [],
   } = business;
 
   const handleContactClick = (type: 'phone' | 'whatsapp' | 'email') => {
@@ -139,7 +140,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
         </div>
 
         <h2
-          className="salon-serif font-light leading-[1.05] text-[#F5F0E8] mb-3 max-w-full md:max-w-[80%] lg:max-w-[65%]"
+          className="salon-serif font-light leading-[1.05] text-[#F5F0E8] mb-3 max-w-full md:max-w-[80%] lg:max-w-[55%] relative z-10"
           style={{ fontSize: 'clamp(3.5rem, 7vw, 6rem)' }}
         >
           Where Beauty<br />Becomes{' '}
@@ -174,7 +175,8 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
         </div>
 
         {/* Aside stats */}
-        <div className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-6 items-end opacity-20 lg:opacity-100">
+        {(!gallery || gallery.length === 0) && (
+          <div className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-6 items-end opacity-20 lg:opacity-100 z-10">
           <div className="text-right">
             <div className="salon-serif salon-gold font-light" style={{ fontSize: '3rem', lineHeight: 1 }}>500+</div>
             <div className="text-[0.6rem] tracking-[0.3em] uppercase text-[#D4C9B2] mt-1">Happy Clients</div>
@@ -190,6 +192,14 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
             <div className="text-[0.6rem] tracking-[0.3em] uppercase text-[#D4C9B2] mt-1">Expert Stylists</div>
           </div>
         </div>
+        )}
+        {/* Hero Sprinkled Image */}
+        {gallery && gallery.length > 0 && (
+          <div className="absolute right-4 lg:right-24 top-1/2 -translate-y-1/2 hidden lg:block w-[300px] h-[400px] xl:w-[400px] xl:h-[500px] opacity-80 hover:opacity-100 transition-opacity duration-500 z-0">
+            <div className="absolute inset-0 bg-[#C9A84C] opacity-20 blur-3xl rounded-full"></div>
+            <img src={gallery[0].url} alt="Salon Style" className="relative w-full h-full object-cover rounded-t-[150px] rounded-b-md shadow-[0_0_40px_rgba(201,168,76,0.15)] border border-[#C9A84C]/30" />
+          </div>
+        )}
 
         <div
           className="absolute bottom-10 left-4 sm:left-8 lg:left-12 text-[0.6rem] tracking-[0.35em] uppercase text-[#D4C9B2] flex items-center gap-3"
@@ -272,6 +282,14 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
               </div>
             ))}
           </div>
+
+          {/* Service Sprinkled Image */}
+          {gallery && gallery.length > 1 && (
+            <div className="mt-20 max-w-4xl mx-auto relative group">
+              <div className="absolute inset-0 bg-[#C9A84C] opacity-10 blur-2xl rounded-full transition-opacity duration-700 group-hover:opacity-25"></div>
+              <img src={gallery[1].url} alt="Service detail" className="relative w-full h-[300px] md:h-[400px] object-cover rounded-2xl border border-[#C9A84C]/20 shadow-[0_10px_40px_rgba(201,168,76,0.1)]" />
+            </div>
+          )}
         </section>
       )}
 
@@ -285,7 +303,8 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
               Opening Hours
               <span style={{ flex: 1, height: '0.5px', background: 'rgba(201,168,76,0.25)' }} />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+            <div className="flex flex-col md:flex-row gap-16 items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-16 flex-1">
               {[hourEntries.slice(0, halfHours), hourEntries.slice(halfHours)].map(
                 (col, ci) => (
                   <div key={ci}>
@@ -311,6 +330,15 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
                     ))}
                   </div>
                 )
+              )}
+              </div>
+              {gallery && gallery.length > 2 && (
+                <div className="flex-1 hidden md:block max-w-[300px]">
+                  <div className="relative aspect-[3/4] w-full group">
+                    <div className="absolute inset-0 bg-[#C9A84C] opacity-10 blur-xl rounded-full transition-opacity duration-700 group-hover:opacity-20"></div>
+                    <img src={gallery[2].url} alt="Salon Hours" className="relative w-full h-full object-cover rounded-tl-full rounded-tr-full rounded-b-xl border-[0.5px] border-[#C9A84C]/20 shadow-[0_10px_30px_rgba(201,168,76,0.05)]" />
+                  </div>
+                </div>
               )}
             </div>
           </div>

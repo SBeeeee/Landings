@@ -13,6 +13,7 @@ export default function RestaurantTemplate({ business }: RestaurantTemplateProps
     services = [],
     contact,
     operatingHours,
+    gallery = [],
   } = business;
 
   const handleContactClick = (type: 'phone' | 'whatsapp' | 'email') => {
@@ -104,7 +105,11 @@ export default function RestaurantTemplate({ business }: RestaurantTemplateProps
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
           <div className="order-2 lg:order-1 relative">
             <div className="relative z-10 scale-110 drop-shadow-[0_20px_30px_rgba(226,94,62,0.15)] transform hover:scale-105 transition-transform duration-700">
-              <img src="/restaurant3.svg" alt="Culinary Art" className="w-full h-auto max-w-lg mx-auto" />
+              {gallery && gallery.length > 0 ? (
+                <img src={gallery[0].url} alt="Culinary Art" className="w-full h-auto max-w-[280px] md:max-w-md mx-auto rounded-full shadow-[0_0_60px_rgba(226,94,62,0.3)] object-cover aspect-square border-8 border-[#1A1614]" />
+              ) : (
+                <img src="/restaurant3.svg" alt="Culinary Art" className="w-full h-auto max-w-lg mx-auto" />
+              )}
             </div>
             {/* Decorative circle behind SVG */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 md:w-80 md:h-80 lg:w-96 lg:h-96 border border-[#E25E3E]/20 rounded-full z-0"></div>
@@ -156,14 +161,24 @@ export default function RestaurantTemplate({ business }: RestaurantTemplateProps
               Experience dining redefined. We blend culinary mastery with a warm, inviting ambiance to create memories that linger long after the last bite.
             </p>
           </div>
-          <div className="flex gap-8 justify-center">
-            <div className="w-1/2 mt-12">
-              <img src="/restaurant1.svg" alt="Restaurant Ambiance" className="w-full h-auto drop-shadow-xl" />
+          {gallery && gallery.length > 1 ? (
+            <div className={`grid ${gallery.length > 2 ? 'grid-cols-2' : 'grid-cols-1'} gap-6 lg:gap-8 justify-center`}>
+              {gallery.slice(1, 3).map((img, i) => (
+                <div key={i} className={`w-full ${i % 2 === 0 && gallery.length > 2 ? 'mt-12' : ''}`}>
+                  <img src={img.url} alt={`Atmosphere ${i + 1}`} className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-[0_15px_40px_rgba(226,94,62,0.12)] sepia-[.3] hover:sepia-0 transition-all duration-700" />
+                </div>
+              ))}
             </div>
-            <div className="w-1/2">
-              <img src="/restaurant2.svg" alt="Culinary Details" className="w-full h-auto drop-shadow-xl" />
+          ) : (
+            <div className="flex gap-8 justify-center">
+              <div className="w-1/2 mt-12">
+                <img src="/restaurant1.svg" alt="Restaurant Ambiance" className="w-full h-auto drop-shadow-xl" />
+              </div>
+              <div className="w-1/2">
+                <img src="/restaurant2.svg" alt="Culinary Details" className="w-full h-auto drop-shadow-xl" />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -193,6 +208,18 @@ export default function RestaurantTemplate({ business }: RestaurantTemplateProps
                 </div>
               ))}
             </div>
+            
+            {/* Additional Food/Dish Images */}
+            {gallery && gallery.length > 3 && (
+              <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4">
+                {gallery.slice(3).map((img, i) => (
+                  <div key={i} className="relative aspect-square overflow-hidden rounded-xl group border border-[#E25E3E]/10">
+                    <img src={img.url} alt={`Signature Dish ${i + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 brightness-90 group-hover:brightness-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       )}

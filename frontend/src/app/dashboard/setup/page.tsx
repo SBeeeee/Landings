@@ -252,6 +252,7 @@ export default function BusinessSetupPage() {
       },
     },
     operatingHours: formData.operatingHours,
+    gallery: business?.gallery || [],
     isPublished: false,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
