@@ -96,7 +96,7 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
       `}</style>
 
       {/* HEADER */}
-      <header className="sticky top-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 tutor-header-blur">
+      <header className="sticky top-0 z-50 flex items-center justify-between px-4 sm:px-8 lg:px-12 py-4 tutor-header-blur">
         <div>
           <h1 className="tutor-serif text-xl md:text-2xl font-semibold tracking-tight text-[#0F172A]">
             {businessName}
@@ -123,7 +123,7 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
       </header>
 
       {/* HERO SECTION */}
-      <section className="relative pt-16 pb-20 md:pt-24 md:pb-32 px-6 md:px-12 overflow-hidden tutor-pattern">
+      <section className="relative pt-16 pb-16 lg:pt-24 lg:pb-32 px-4 sm:px-8 lg:px-12 overflow-hidden tutor-pattern">
         {/* Decorative background blobs */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-blob pointer-events-none"></div>
         <div className="absolute bottom-0 left-[-100px] w-[400px] h-[400px] bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-blob animation-delay-2000 pointer-events-none"></div>
@@ -217,7 +217,7 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
       </section>
 
       {/* WHY CHOOSE ME SECTION */}
-      <section className="py-20 px-6 md:px-12 bg-white border-y border-[#E2E8F0]">
+      <section className="py-16 lg:py-20 px-4 sm:px-8 lg:px-12 bg-white border-y border-[#E2E8F0]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="order-2 lg:order-1 relative flex justify-center">
@@ -261,7 +261,7 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
 
       {/* SERVICES/SUBJECTS */}
       {services.length > 0 && (
-        <section className="py-24 px-6 md:px-12 bg-[#F8FAFC]">
+        <section className="py-16 lg:py-24 px-4 sm:px-8 lg:px-12 bg-[#F8FAFC]">
           <div className="max-w-6xl mx-auto">
             <div className="mb-16 text-center">
               <h3 className="tutor-serif text-3xl md:text-4xl font-semibold mb-4 text-[#0F172A]">
@@ -309,7 +309,7 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
       )}
 
       {/* SCHEDULE & CONTACT DUAL SECTION */}
-      <section className="py-24 px-6 md:px-12 bg-white border-t border-[#E2E8F0]">
+      <section className="py-16 lg:py-24 px-4 sm:px-8 lg:px-12 bg-white border-t border-[#E2E8F0]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
           
           {/* Schedule */}
@@ -421,7 +421,7 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-8 px-6 md:px-12 bg-white border-t border-[#E2E8F0] text-center md:text-left">
+      <footer className="py-8 px-4 sm:px-8 lg:px-12 bg-white border-t border-[#E2E8F0] text-center md:text-left">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
             <h2 className="tutor-serif text-lg font-semibold text-[#0F172A]">{businessName}</h2>

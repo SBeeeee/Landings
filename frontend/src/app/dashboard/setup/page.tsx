@@ -14,6 +14,8 @@ import TutorTemplate from '@/components/templates/TutorTemplate';
 import GymTemplate from '@/components/templates/GymTemplate';
 import RestaurantTemplate from '@/components/templates/RestaurantTemplate';
 import { Business } from '@/services/business.service';
+import { SidebarContext } from '../layout';
+import { useContext } from 'react';
 
 const businessTypes = [
   { value: 'salon', label: 'Salon' },
@@ -50,6 +52,7 @@ export default function BusinessSetupPage() {
   const [sameAsPhone, setSameAsPhone] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [activeTab, setActiveTab] = useState<'basic' | 'contact' | 'services' | 'hours'>('basic');
+  const { setIsCollapsed } = useContext(SidebarContext);
 
   const [formData, setFormData] = useState({
     username: user?.username || '',
@@ -275,7 +278,10 @@ export default function BusinessSetupPage() {
             type="button" 
             variant="outline" 
             className="border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white"
-            onClick={() => setShowPreview(true)}
+            onClick={() => {
+              setShowPreview(true);
+              setIsCollapsed(true);
+            }}
           >
             Preview Site
           </Button>
@@ -571,7 +577,7 @@ export default function BusinessSetupPage() {
             </div>
             
             {/* Modal Content - Scrollable Iframe feel */}
-            <div className="flex-1 overflow-y-auto bg-gray-950 relative">
+            <div className="flex-1 overflow-y-auto bg-gray-950 relative" style={{ transform: 'translateZ(0)' }}>
               {formData.businessType === 'salon' ? (
                 <SalonTemplate business={previewBusinessData} />
               ) : formData.businessType === 'tutor' ? (

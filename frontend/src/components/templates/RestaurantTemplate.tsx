@@ -72,7 +72,7 @@ export default function RestaurantTemplate({ business }: RestaurantTemplateProps
       `}</style>
 
       {/* NAV */}
-      <header className="absolute top-0 w-full z-50 px-6 py-8 md:px-16 flex items-center justify-between">
+      <header className="absolute top-0 w-full z-50 px-4 sm:px-8 lg:px-16 py-6 lg:py-8 flex items-center justify-between">
         <div className="resto-title text-2xl md:text-3xl font-semibold tracking-wide">
           {businessName}<span className="resto-accent">.</span>
         </div>
@@ -97,7 +97,7 @@ export default function RestaurantTemplate({ business }: RestaurantTemplateProps
       </header>
 
       {/* HERO SECTION */}
-      <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden px-6 md:px-16 pt-20">
+      <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden px-4 sm:px-8 lg:px-16 pt-24 md:pt-32 pb-12">
         {/* Ambient glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#E25E3E] rounded-full blur-[200px] opacity-[0.08] pointer-events-none"></div>
         
@@ -107,7 +107,7 @@ export default function RestaurantTemplate({ business }: RestaurantTemplateProps
               <img src="/restaurant3.svg" alt="Culinary Art" className="w-full h-auto max-w-lg mx-auto" />
             </div>
             {/* Decorative circle behind SVG */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 md:w-80 md:h-80 border border-[#E25E3E]/20 rounded-full z-0"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 md:w-80 md:h-80 lg:w-96 lg:h-96 border border-[#E25E3E]/20 rounded-full z-0"></div>
           </div>
           
           <div className="order-1 lg:order-2 flex flex-col justify-center">
@@ -116,7 +116,7 @@ export default function RestaurantTemplate({ business }: RestaurantTemplateProps
                 — {tagline}
               </p>
             )}
-            <h1 className="resto-title text-6xl md:text-8xl font-semibold leading-[1.1] mb-8">
+            <h1 className="resto-title text-5xl md:text-7xl lg:text-8xl font-semibold leading-[1.1] mb-8">
               A Taste of <br />
               <span className="italic font-light text-[#E25E3E]">Perfection</span>
             </h1>
@@ -148,8 +148,8 @@ export default function RestaurantTemplate({ business }: RestaurantTemplateProps
       </section>
 
       {/* ATMOSPHERE / SVG SHOWCASE */}
-      <section className="py-24 bg-[#1A1614]">
-        <div className="max-w-7xl mx-auto px-6 md:px-16 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <section className="py-16 lg:py-24 bg-[#1A1614]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
             <h2 className="resto-title text-4xl md:text-5xl mb-6 font-semibold">The <i className="text-[#E25E3E] font-light">Atmosphere</i></h2>
             <p className="text-gray-400 font-light leading-relaxed mb-8">
@@ -169,7 +169,7 @@ export default function RestaurantTemplate({ business }: RestaurantTemplateProps
 
       {/* MENU / SERVICES */}
       {services.length > 0 && (
-        <section className="py-32 px-6 md:px-16 relative">
+        <section className="py-20 lg:py-32 px-4 sm:px-8 lg:px-16 relative">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-20">
               <p className="text-[#E25E3E] tracking-[0.3em] uppercase text-xs mb-4">— Discover</p>
@@ -198,7 +198,7 @@ export default function RestaurantTemplate({ business }: RestaurantTemplateProps
       )}
 
       {/* FOOTER & INFO */}
-      <footer className="bg-[#1A1614] border-t border-[#E25E3E]/10 pt-24 pb-12 px-6 md:px-16">
+      <footer className="bg-[#1A1614] border-t border-[#E25E3E]/10 pt-16 lg:pt-24 pb-12 px-4 sm:px-8 lg:px-16">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 mb-20">
           
           {/* Brand */}

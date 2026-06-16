@@ -60,7 +60,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
         .salon-serif { font-family: 'Cormorant Garamond', serif; }
         .salon-gold { color: #C9A84C; }
         .salon-gold-border { border-color: rgba(201,168,76,0.4); }
-        .salon-marquee { animation: salonMarquee 18s linear infinite; display: flex; white-space: nowrap; }
+        .salon-marquee { animation: salonMarquee 40s linear infinite; display: flex; white-space: nowrap; width: max-content; }
         @keyframes salonMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         .salon-service-card:hover { border-color: rgba(201,168,76,0.4) !important; background: rgba(201,168,76,0.03) !important; }
         .salon-btn-ghost { transition: all 0.3s; }
@@ -72,7 +72,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
 
       {/* NAV */}
       <header
-        className="sticky top-0 z-50 flex items-center justify-between px-12 py-5"
+        className="sticky top-0 z-50 flex items-center justify-between px-4 sm:px-8 lg:px-12 py-4 lg:py-5"
         style={{
           background: 'rgba(10,10,10,0.92)',
           backdropFilter: 'blur(12px)',
@@ -114,7 +114,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
       </header>
 
       {/* HERO */}
-      <section className="relative min-h-[88vh] flex flex-col justify-center px-12 py-24 overflow-hidden">
+      <section className="relative min-h-[88vh] flex flex-col justify-center px-4 sm:px-8 lg:px-12 py-16 lg:py-24 overflow-hidden">
         {/* Decorative lines */}
         <svg
           className="absolute right-0 top-0 w-[45%] h-full pointer-events-none opacity-50"
@@ -139,7 +139,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
         </div>
 
         <h2
-          className="salon-serif font-light leading-[1.05] text-[#F5F0E8] mb-3 max-w-[65%]"
+          className="salon-serif font-light leading-[1.05] text-[#F5F0E8] mb-3 max-w-full md:max-w-[80%] lg:max-w-[65%]"
           style={{ fontSize: 'clamp(3.5rem, 7vw, 6rem)' }}
         >
           Where Beauty<br />Becomes{' '}
@@ -174,7 +174,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
         </div>
 
         {/* Aside stats */}
-        <div className="absolute right-12 top-1/2 -translate-y-1/2 flex flex-col gap-6 items-end">
+        <div className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-6 items-end opacity-20 lg:opacity-100">
           <div className="text-right">
             <div className="salon-serif salon-gold font-light" style={{ fontSize: '3rem', lineHeight: 1 }}>500+</div>
             <div className="text-[0.6rem] tracking-[0.3em] uppercase text-[#D4C9B2] mt-1">Happy Clients</div>
@@ -192,7 +192,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
         </div>
 
         <div
-          className="absolute bottom-10 left-12 text-[0.6rem] tracking-[0.35em] uppercase text-[#D4C9B2] flex items-center gap-3"
+          className="absolute bottom-10 left-4 sm:left-8 lg:left-12 text-[0.6rem] tracking-[0.35em] uppercase text-[#D4C9B2] flex items-center gap-3"
         >
           Scroll to explore
           <span style={{ display: 'block', width: 50, height: '0.5px', background: 'currentColor' }} />
@@ -209,7 +209,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
         }}
       >
         <div className="salon-marquee">
-          {[...marqueeItems, ...marqueeItems].map((item, i) => (
+          {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
             <span key={i} className="flex items-center">
               <span className="text-[0.62rem] tracking-[0.4em] uppercase text-[#D4C9B2] px-10">
                 {item}
@@ -222,7 +222,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
 
       {/* SERVICES */}
       {services.length > 0 && (
-        <section className="px-12 py-24">
+        <section className="px-4 sm:px-8 lg:px-12 py-16 lg:py-24">
           <div
             className="text-[0.6rem] tracking-[0.5em] uppercase text-[#C9A84C] mb-14 flex items-center gap-4"
           >
@@ -277,7 +277,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
 
       {/* HOURS */}
       {hourEntries.length > 0 && (
-        <div className="px-12 py-20" style={{ background: '#141414' }}>
+        <div className="px-4 sm:px-8 lg:px-12 py-16 lg:py-20" style={{ background: '#141414' }}>
           <div className="max-w-4xl mx-auto">
             <div
               className="text-[0.6rem] tracking-[0.5em] uppercase text-[#C9A84C] mb-12 flex items-center gap-4"
@@ -318,7 +318,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
       )}
 
       {/* CONTACT */}
-      <section className="px-12 py-24 text-center">
+      <section className="px-4 sm:px-8 lg:px-12 py-16 lg:py-24 text-center">
         <p className="text-[0.68rem] tracking-[0.3em] uppercase text-[#D4C9B2] mb-3">
           We'd love to hear from you
         </p>
@@ -425,7 +425,7 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
 
       {/* FOOTER */}
       <footer
-        className="flex items-center justify-between flex-wrap gap-4 px-12 py-10"
+        className="flex items-center justify-between flex-wrap gap-4 px-4 sm:px-8 lg:px-12 py-8 lg:py-10"
         style={{ borderTop: '0.5px solid rgba(201,168,76,0.2)', background: '#0A0A0A' }}
       >
         <div>

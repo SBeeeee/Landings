@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, createContext, useContext } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
@@ -31,6 +31,14 @@ const UserIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
 );
 
+export const SidebarContext = createContext<{
+  isCollapsed: boolean;
+  setIsCollapsed: (v: boolean) => void;
+}>({
+  isCollapsed: false,
+  setIsCollapsed: () => {},
+});
+
 export default function DashboardLayout({
   children,
 }: {
@@ -55,7 +63,8 @@ export default function DashboardLayout({
 
   return (
     <PrivateRoute>
-      <div className="min-h-screen bg-gray-950 text-white md:flex">
+      <SidebarContext.Provider value={{ isCollapsed, setIsCollapsed }}>
+        <div className="min-h-screen bg-gray-950 text-white md:flex">
         <aside
           className={`flex w-full flex-col border-b border-white/10 bg-gray-950/90 p-4 transition-all duration-300 md:min-h-screen md:border-b-0 md:border-r ${
             isCollapsed ? 'md:w-20 md:p-4' : 'md:w-80 md:p-6'
@@ -120,7 +129,8 @@ export default function DashboardLayout({
         </aside>
 
         <main className="flex-1 p-4 transition-all duration-300 sm:p-6 md:p-10">{children}</main>
-      </div>
+        </div>
+      </SidebarContext.Provider>
     </PrivateRoute>
   );
 }

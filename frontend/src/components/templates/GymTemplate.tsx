@@ -59,7 +59,7 @@ export default function GymTemplate({ business }: GymTemplateProps) {
         .gym-title { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
         .gym-red { color: #FF2A2A; }
         .gym-bg-red { background-color: #FF2A2A; }
-        .gym-marquee { animation: gymMarquee 12s linear infinite; display: flex; white-space: nowrap; }
+        .gym-marquee { animation: gymMarquee 30s linear infinite; display: flex; white-space: nowrap; width: max-content; }
         @keyframes gymMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         
         /* Glitch effect on hover for buttons */
@@ -106,7 +106,7 @@ export default function GymTemplate({ business }: GymTemplateProps) {
       `}</style>
 
       {/* HEADER */}
-      <header className="fixed w-full top-0 z-50 px-6 py-4 md:px-12 md:py-6 bg-[#0A0A0A]/90 backdrop-blur-md border-b border-[#FF2A2A]/20">
+      <header className="fixed w-full top-0 z-50 px-4 sm:px-8 lg:px-12 py-4 lg:py-6 bg-[#0A0A0A]/90 backdrop-blur-md border-b border-[#FF2A2A]/20">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div>
             <h1 className="gym-title text-2xl md:text-3xl font-bold tracking-wider">
@@ -136,7 +136,7 @@ export default function GymTemplate({ business }: GymTemplateProps) {
       </header>
 
       {/* HERO */}
-      <section className="relative min-h-[90vh] flex items-center px-6 md:px-12 pt-24 overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center px-4 sm:px-8 lg:px-12 pt-24 pb-12 lg:pt-32 overflow-hidden">
         {/* Background Grids & Elements */}
         <div className="absolute inset-0 z-0 opacity-20" 
              style={{ 
@@ -153,7 +153,7 @@ export default function GymTemplate({ business }: GymTemplateProps) {
                 <span className="gym-title gym-red tracking-widest text-sm">{tagline}</span>
               </div>
             )}
-            <h2 className="gym-title text-6xl md:text-8xl lg:text-9xl font-bold leading-[0.9] mb-6">
+            <h2 className="gym-title text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-[0.9] mb-6">
               FORGE YOUR<br />
               <span className="text-transparent" style={{ WebkitTextStroke: '2px #FF2A2A' }}>LEGACY</span>
             </h2>
@@ -185,7 +185,7 @@ export default function GymTemplate({ business }: GymTemplateProps) {
       {/* MARQUEE */}
       <div className="overflow-hidden py-4 border-y border-[#FF2A2A]/30 bg-[#FF2A2A] text-[#0A0A0A] transform -rotate-1 origin-left mt-12 mb-24">
         <div className="gym-marquee">
-          {[...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
+          {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
             <span key={i} className="flex items-center gym-title text-3xl font-bold px-8">
               {item} <span className="mx-8 text-[#0A0A0A]/30">/</span>
             </span>
@@ -194,7 +194,7 @@ export default function GymTemplate({ business }: GymTemplateProps) {
       </div>
 
       {/* SVGs showcase (gym1 & gym2) */}
-      <section className="px-6 md:px-12 py-12">
+      <section className="px-4 sm:px-8 lg:px-12 py-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 opacity-50 hover:opacity-100 transition-opacity duration-500">
           <div className="flex justify-center items-center p-12 gym-card">
             <img src="/gym1.svg" alt="Gym Graphic 1" className="w-3/4 h-auto drop-shadow-[0_0_15px_rgba(255,42,42,0.2)]" />
@@ -207,7 +207,7 @@ export default function GymTemplate({ business }: GymTemplateProps) {
 
       {/* SERVICES */}
       {services.length > 0 && (
-        <section className="px-6 md:px-12 py-24 relative">
+        <section className="px-4 sm:px-8 lg:px-12 py-16 lg:py-24 relative">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
               <div>
@@ -248,7 +248,7 @@ export default function GymTemplate({ business }: GymTemplateProps) {
       )}
 
       {/* HOURS & CONTACT SPLIT */}
-      <section className="px-6 md:px-12 py-24 bg-[#121212] border-t border-[#FF2A2A]/10">
+      <section className="px-4 sm:px-8 lg:px-12 py-16 lg:py-24 bg-[#121212] border-t border-[#FF2A2A]/10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
           {/* HOURS */}
           {hourEntries.length > 0 && (
@@ -311,7 +311,7 @@ export default function GymTemplate({ business }: GymTemplateProps) {
       </section>
 
       {/* FOOTER */}
-      <footer className="px-6 md:px-12 py-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+      <footer className="px-4 sm:px-8 lg:px-12 py-8 lg:py-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
         <div className="gym-title text-3xl font-bold tracking-widest text-[#555]">
           {businessName}
         </div>
