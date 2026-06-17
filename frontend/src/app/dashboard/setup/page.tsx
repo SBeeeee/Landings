@@ -13,6 +13,7 @@ import SalonTemplate from '@/components/templates/SalonTemplate';
 import TutorTemplate from '@/components/templates/TutorTemplate';
 import GymTemplate from '@/components/templates/GymTemplate';
 import RestaurantTemplate from '@/components/templates/RestaurantTemplate';
+import MakeupTemplate from '@/components/templates/MakeupTemplate';
 import { Business } from '@/services/business.service';
 import { SidebarContext } from '../layout';
 import { useContext } from 'react';
@@ -20,7 +21,7 @@ import { useContext } from 'react';
 const businessTypes = [
   { value: 'salon', label: 'Salon' },
   { value: 'tutor', label: 'Tutor' },
-  { value: 'boutique', label: 'Boutique' },
+  { value: 'makeup', label: 'Makeup Studio' },
   { value: 'gym', label: 'Gym' },
   { value: 'restaurant', label: 'Restaurant' },
   { value: 'other', label: 'Other' },
@@ -200,7 +201,7 @@ export default function BusinessSetupPage() {
       businessType: formData.businessType as
         | 'salon'
         | 'tutor'
-        | 'boutique'
+        | 'makeup'
         | 'gym'
         | 'restaurant'
         | 'other',
@@ -239,7 +240,7 @@ export default function BusinessSetupPage() {
     userId: user?._id || 'preview-user-id',
     username: formData.username || 'preview',
     businessName: formData.businessName || 'Your Business Name',
-    businessType: formData.businessType as 'salon' | 'tutor',
+    businessType: formData.businessType as 'salon' | 'tutor' | 'makeup' | 'gym' | 'restaurant' | 'other',
     tagline: formData.tagline || 'Your tagline here',
     description: formData.description || 'Business description goes here.',
     services: services.filter(s => s.name.trim() !== ''),
@@ -606,6 +607,8 @@ export default function BusinessSetupPage() {
                 <GymTemplate business={previewBusinessData} />
               ) : formData.businessType === 'restaurant' ? (
                 <RestaurantTemplate business={previewBusinessData} />
+              ) : formData.businessType === 'makeup' ? (
+                <MakeupTemplate business={previewBusinessData} />
               ) : (
                 <div className="flex items-center justify-center h-full text-gray-500">
                   <div className="text-center">

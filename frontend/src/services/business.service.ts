@@ -3,7 +3,7 @@ import api from '../utils/api';
 export type BusinessType =
   | 'salon'
   | 'tutor'
-  | 'boutique'
+  | 'makeup'
   | 'gym'
   | 'restaurant'
   | 'other';

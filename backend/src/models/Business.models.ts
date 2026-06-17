@@ -21,7 +21,7 @@ const businessSchema = new Schema({
   },
   businessType: {
     type: String,
-    enum: ['salon', 'tutor', 'boutique', 'gym', 'restaurant', 'other'],
+    enum: ['salon', 'tutor', 'makeup', 'gym', 'restaurant', 'other'],
     required: true
   },
   tagline: String,

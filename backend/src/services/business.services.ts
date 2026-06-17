@@ -41,7 +41,7 @@ export interface GalleryImage {
 export interface CreateBusinessInput {
   username: string;
   businessName: string;
-  businessType: 'salon' | 'tutor' | 'boutique' | 'gym' | 'restaurant' | 'other';
+  businessType: 'salon' | 'tutor' | 'makeup' | 'gym' | 'restaurant' | 'other';
   tagline?: string;
   description?: string;
   services?: ServiceItem[];
