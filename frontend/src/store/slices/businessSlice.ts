@@ -19,6 +19,7 @@ interface BusinessState {
   publicError: string | null;
   initialized: boolean;
   uploading: boolean;
+  deleting: boolean;
   uploadError: string | null;
 }
 
@@ -31,6 +32,7 @@ const initialState: BusinessState = {
   publicError: null,
   initialized: false,
   uploading: false,
+  deleting: false,
   uploadError: null,
 };
 
@@ -132,11 +134,11 @@ const businessSlice = createSlice({
         state.uploadError = (action.payload as string) ?? 'Failed to upload image';
       })
       .addCase(deleteGalleryImageThunk.pending, (state) => {
-        state.uploading = true;
+        state.deleting = true;
         state.uploadError = null;
       })
       .addCase(deleteGalleryImageThunk.fulfilled, (state, action) => {
-        state.uploading = false;
+        state.deleting = false;
         if (state.business?.gallery) {
           state.business.gallery = state.business.gallery.filter(
             (img: GalleryImage) => img.publicId !== action.payload
@@ -144,7 +146,7 @@ const businessSlice = createSlice({
         }
       })
       .addCase(deleteGalleryImageThunk.rejected, (state, action) => {
-        state.uploading = false;
+        state.deleting = false;
         state.uploadError = (action.payload as string) ?? 'Failed to delete image';
       });
   },

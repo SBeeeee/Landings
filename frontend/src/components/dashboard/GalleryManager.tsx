@@ -1,15 +1,25 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useBusiness } from '@/hooks/useBusiness';
 import Button from '@/components/ui/Button';
+import Modal from '@/components/ui/Modal';
 import Spinner from '@/components/ui/Spinner';
+import { useSharedToast } from '@/components/ui/Toast';
 import type { GalleryImage } from '@/services/business.service';
 
 export default function GalleryManager() {
-  const { business, uploading, uploadError, uploadImage, deleteImage } = useBusiness();
+  const { business, uploading, deleting, uploadError, uploadImage, deleteImage } = useBusiness();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+  const toast = useSharedToast();
+
+  useEffect(() => {
+    if (uploadError) {
+      toast.error(uploadError);
+    }
+  }, [uploadError]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -18,7 +28,10 @@ export default function GalleryManager() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleDelete = async (publicId: string) => {
+  const handleDelete = async () => {
+    if (!confirmDelete) return;
+    const publicId = confirmDelete;
+    setConfirmDelete(null);
     setDeletingId(publicId);
     await deleteImage(publicId);
     setDeletingId(null);
@@ -38,9 +51,9 @@ export default function GalleryManager() {
         <Button
           size="sm"
           onClick={() => fileInputRef.current?.click()}
-          disabled={uploading}
+          disabled={uploading || deleting}
         >
-          {uploading ? 'Uploading...' : 'Add Photo'}
+          {gallery.length >= 3 ? 'Limit Reached' : uploading ? 'Uploading...' : deleting ? 'Deleting...' : 'Add Photo'}
         </Button>
         <input
           ref={fileInputRef}
@@ -50,10 +63,6 @@ export default function GalleryManager() {
           className="hidden"
         />
       </div>
-
-      {uploadError && (
-        <p className="text-sm text-red-400">{uploadError}</p>
-      )}
 
       {gallery.length === 0 && !uploading ? (
         <div className="rounded-2xl border border-dashed border-white/10 p-12 text-center">
@@ -90,7 +99,7 @@ export default function GalleryManager() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handleDelete(image.publicId)}
+                  onClick={() => setConfirmDelete(image.publicId)}
                   disabled={deletingId === image.publicId}
                   className="opacity-0 group-hover:opacity-100 transition-opacity"
                 >
@@ -123,6 +132,23 @@ export default function GalleryManager() {
           )}
         </div>
       )}
+
+      <Modal
+        open={!!confirmDelete}
+        onClose={() => setConfirmDelete(null)}
+        title="Delete Image"
+        description="Are you sure you want to remove this image from your gallery?"
+        size="sm"
+      >
+        <div className="flex items-center justify-end gap-3">
+          <Button variant="ghost" size="sm" onClick={() => setConfirmDelete(null)}>
+            Cancel
+          </Button>
+          <Button variant="primary" size="sm" onClick={handleDelete}>
+            Delete
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

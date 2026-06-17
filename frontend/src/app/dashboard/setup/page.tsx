@@ -51,7 +51,7 @@ export default function BusinessSetupPage() {
   const [allowUsernameChange, setAllowUsernameChange] = useState(false);
   const [sameAsPhone, setSameAsPhone] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
-  const [activeTab, setActiveTab] = useState<'basic' | 'contact' | 'services' | 'hours'>('basic');
+  const [activeTab, setActiveTab] = useState<'basic' | 'contact' | 'services' | 'hours' | 'gallery'>('basic');
   const { setIsCollapsed } = useContext(SidebarContext);
 
   const [formData, setFormData] = useState({
@@ -263,6 +263,7 @@ export default function BusinessSetupPage() {
     { id: 'contact', label: 'Contact & Social' },
     { id: 'services', label: 'Services' },
     { id: 'hours', label: 'Operating Hours' },
+    { id: 'gallery', label: 'Gallery' },
   ];
 
   return (
@@ -537,11 +538,18 @@ export default function BusinessSetupPage() {
               ))}
             </div>
           </div>
-          {hasSubmittedSite && (
-          <div className="space-y-4">
-            <GalleryManager />
+          {/* GALLERY TAB */}
+          <div className={activeTab === 'gallery' ? 'block space-y-6' : 'hidden'}>
+            {hasSubmittedSite ? (
+              <GalleryManager />
+            ) : (
+              <div className="rounded-2xl border border-dashed border-white/10 p-12 text-center">
+                <p className="text-sm text-gray-500">
+                  Save your business data first to unlock the gallery.
+                </p>
+              </div>
+            )}
           </div>
-        )}
           {/* Global Submit */}
           <div className="pt-8 border-t border-white/10 flex items-center justify-between">
             <p className="text-sm text-gray-500">
