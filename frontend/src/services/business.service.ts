@@ -25,6 +25,7 @@ export interface ContactInput {
   phone?: string;
   email?: string;
   address?: string;
+  googleMapsLink?: string;
   whatsapp?: string;
   socialLinks?: SocialLinks;
 }

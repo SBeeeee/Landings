@@ -38,6 +38,7 @@ const businessSchema = new Schema({
     phone: String,
     email: String,
     address: String,
+    googleMapsLink: String,
     whatsapp: String,
     socialLinks: {
       instagram: String,

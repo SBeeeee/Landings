@@ -141,7 +141,7 @@ export default function RestaurantTemplate({ business }: RestaurantTemplateProps
               )}
               {contact?.address && (
                 <button
-                  onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(contact.address || '')}`, '_blank')}
+                  onClick={() => contact.googleMapsLink && window.open(contact.googleMapsLink, '_blank')}
                   className="text-gray-300 hover:text-[#E25E3E] text-sm tracking-widest uppercase transition-colors underline decoration-white/20 underline-offset-8"
                 >
                   Location

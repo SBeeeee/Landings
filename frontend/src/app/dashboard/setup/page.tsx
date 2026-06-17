@@ -63,6 +63,7 @@ export default function BusinessSetupPage() {
     contactPhone: '',
     contactEmail: '',
     contactAddress: '',
+    contactGoogleMapsLink: '',
     contactWhatsapp: '',
     socialInstagram: '',
     socialFacebook: '',
@@ -109,6 +110,7 @@ export default function BusinessSetupPage() {
       contactPhone: business.contact?.phone || '',
       contactEmail: business.contact?.email || '',
       contactAddress: business.contact?.address || '',
+      contactGoogleMapsLink: business.contact?.googleMapsLink || '',
       contactWhatsapp: business.contact?.whatsapp || '',
       socialInstagram: business.contact?.socialLinks?.instagram || '',
       socialFacebook: business.contact?.socialLinks?.facebook || '',
@@ -209,6 +211,7 @@ export default function BusinessSetupPage() {
         phone: formData.contactPhone,
         email: formData.contactEmail,
         address: formData.contactAddress,
+        googleMapsLink: formData.contactGoogleMapsLink,
         whatsapp: formData.contactWhatsapp,
         socialLinks: {
           instagram: formData.socialInstagram,
@@ -244,6 +247,7 @@ export default function BusinessSetupPage() {
       phone: formData.contactPhone,
       email: formData.contactEmail,
       address: formData.contactAddress,
+      googleMapsLink: formData.contactGoogleMapsLink,
       whatsapp: formData.contactWhatsapp,
       socialLinks: {
         instagram: formData.socialInstagram,
@@ -423,6 +427,13 @@ export default function BusinessSetupPage() {
                   placeholder="Street, City, State"
                   value={formData.contactAddress}
                   onChange={(e) => handleChange('contactAddress', e.target.value)}
+                />
+
+                <Input
+                  label="Google Maps Link"
+                  placeholder="https://maps.app.goo.gl/..."
+                  value={formData.contactGoogleMapsLink}
+                  onChange={(e) => handleChange('contactGoogleMapsLink', e.target.value)}
                 />
               </div>
             </div>

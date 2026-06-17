@@ -420,12 +420,14 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
                   <div>
                     <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1">Location</p>
                     <p className="text-lg font-medium text-[#0F172A]">{contact.address}</p>
-                    <button 
-                      onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(contact.address || '')}`, '_blank')} 
-                      className="text-sm tutor-accent font-medium mt-1 hover:underline"
-                    >
-                      Get Directions
-                    </button>
+                    {contact.googleMapsLink && (
+                      <button 
+                        onClick={() => window.open(contact.googleMapsLink, '_blank')} 
+                        className="text-sm tutor-accent font-medium mt-1 hover:underline"
+                      >
+                        Get Directions
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
