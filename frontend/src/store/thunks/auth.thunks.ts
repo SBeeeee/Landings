@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import authService from '../../services/auth.service';
 import type { User } from '../../services/auth.service';
 
-export const registerThunk = createAsyncThunk<User, { username: string; email: string; password: string }>(
+export const registerThunk = createAsyncThunk<User, { name: string; username: string; email: string; password: string }>(
   'auth/register',
   async (data, { rejectWithValue }) => {
     try {

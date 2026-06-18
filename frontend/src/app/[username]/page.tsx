@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useBusiness } from '@/hooks/useBusiness';
 import SalonTemplate from '@/components/templates/SalonTemplate';
@@ -13,6 +13,7 @@ import LoadingSpinner from '@/components/ui/Spinner';
 export default function PublicBusinessPage() {
   const params = useParams();
   const username = params.username as string;
+  const [isInitializing, setIsInitializing] = useState(true);
   
   const { 
     publicBusiness, 
@@ -23,17 +24,26 @@ export default function PublicBusinessPage() {
   } = useBusiness();
 
   useEffect(() => {
+    let isMounted = true;
     if (username) {
-      fetchPublicBusiness(username);
+      setIsInitializing(true);
+      fetchPublicBusiness(username).finally(() => {
+        if (isMounted) {
+          setIsInitializing(false);
+        }
+      });
+    } else {
+      setIsInitializing(false);
     }
     
     // Cleanup when component unmounts or username changes
     return () => {
+      isMounted = false;
       clearPublicBusiness();
     };
   }, [username, fetchPublicBusiness, clearPublicBusiness]);
 
-  if (publicLoading) {
+  if (publicLoading || isInitializing) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
         <LoadingSpinner />

@@ -40,6 +40,17 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
     ? Object.entries(operatingHours).filter(([, v]) => v)
     : [];
 
+  const defaultGallery = [
+    { url: '/tutor1.svg' },
+    { url: '/tutor2.svg' },
+    { url: '/tutor3.svg' },
+    { url: '/tutor4.svg' },
+  ];
+  const displayGallery = [
+    ...gallery,
+    ...defaultGallery.slice(gallery.length)
+  ].slice(0, Math.max(gallery.length, 4));
+
   return (
     <div
       style={{ fontFamily: "'Inter', sans-serif" }}
@@ -178,21 +189,12 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
             {/* Right Column: Illustration */}
             <div className="relative w-full max-w-lg mx-auto lg:max-w-none lg:h-[500px] flex items-center justify-center">
               <div className="absolute inset-0 bg-gradient-to-tr from-blue-50 to-indigo-50 rounded-full filter blur-2xl opacity-70 transform scale-90"></div>
-              {gallery && gallery.length > 0 ? (
-                <img 
-                  src={gallery[0].url} 
-                  alt="Tutoring" 
-                  className="relative z-10 w-full h-[400px] md:h-[500px] object-cover rounded-3xl shadow-2xl border-4 border-white hover:scale-[1.02] transition-transform duration-500"
-                />
-              ) : (
-                <Image 
-                  src="/tutor1.svg" 
-                  alt="Tutoring Illustration" 
-                  width={600} 
-                  height={500} 
-                  className="relative z-10 w-full h-auto object-contain drop-shadow-2xl hover:scale-[1.02] transition-transform duration-500"
-                  priority
-                />
+              {displayGallery && displayGallery.length > 0 && (
+                  <img 
+                    src={displayGallery[0].url} 
+                    alt="Tutoring" 
+                    className={`relative z-10 w-full h-auto object-cover rounded-3xl shadow-2xl border-4 border-white hover:scale-[1.02] transition-transform duration-500 ${displayGallery[0].url.endsWith('.svg') ? 'object-contain p-8 bg-white' : ''}`}
+                  />
               )}
               
               {/* Floating detail cards */}
@@ -231,19 +233,11 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="order-2 lg:order-1 relative flex justify-center">
               <div className="absolute inset-0 bg-blue-50 rounded-full filter blur-3xl opacity-50"></div>
-              {gallery && gallery.length > 1 ? (
+              {displayGallery && displayGallery.length > 1 && (
                 <img 
-                  src={gallery[1].url} 
+                  src={displayGallery[1].url} 
                   alt="Learning Philosophy" 
-                  className="relative z-10 w-full max-w-md h-[400px] object-cover rounded-3xl shadow-2xl border-4 border-white rotate-2 hover:rotate-0 transition-transform duration-500"
-                />
-              ) : (
-                <Image 
-                  src="/tutor2.svg" 
-                  alt="Learning Philosophy" 
-                  width={500} 
-                  height={400} 
-                  className="relative z-10 w-full max-w-md h-auto drop-shadow-xl"
+                  className={`relative z-10 w-full max-w-md h-auto object-cover rounded-3xl shadow-2xl border-4 border-white rotate-2 hover:rotate-0 transition-transform duration-500 ${displayGallery[1].url.endsWith('.svg') ? 'object-contain p-8 bg-white' : ''}`}
                 />
               )}
             </div>
@@ -290,11 +284,11 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
                 </p>
               </div>
               
-              {gallery && gallery.length > 2 && (
+              {displayGallery && displayGallery.length > 2 && (
                  <div className="w-48 lg:w-64 transform rotate-6 hover:rotate-0 transition-transform duration-500 hidden md:block z-0 opacity-80 hover:opacity-100 flex-shrink-0">
                     <div className="p-2 lg:p-3 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100">
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-                        <img src={gallery[2].url} alt="Tutoring Snapshot" className="w-full h-full object-cover" />
+                      <div className="relative overflow-hidden rounded-xl">
+                        <img src={displayGallery[2].url} alt="Tutoring Snapshot" className={`w-full h-auto object-cover ${displayGallery[2].url.endsWith('.svg') ? 'object-contain p-4 bg-slate-50' : ''}`} />
                       </div>
                     </div>
                  </div>
@@ -339,11 +333,11 @@ export default function TutorTemplate({ business }: TutorTemplateProps) {
 
       {/* SCHEDULE & CONTACT DUAL SECTION */}
       <section className="py-16 lg:py-24 px-4 sm:px-8 lg:px-12 bg-white border-t border-[#E2E8F0] relative overflow-hidden">
-        {gallery && gallery.length > 3 && (
+        {displayGallery && displayGallery.length > 3 && (
            <div className="absolute top-20 left-4 lg:left-12 w-32 lg:w-48 transform -rotate-6 hover:rotate-0 transition-transform duration-500 hidden xl:block z-0 opacity-40 hover:opacity-100">
               <div className="p-2 bg-white rounded-xl shadow-lg border border-slate-100">
-                <div className="relative aspect-[3/4] overflow-hidden rounded-lg">
-                  <img src={gallery[3].url} alt="Contact Snapshot" className="w-full h-full object-cover" />
+                <div className="relative overflow-hidden rounded-lg">
+                  <img src={displayGallery[3].url} alt="Contact Snapshot" className={`w-full h-auto object-cover ${displayGallery[3].url.endsWith('.svg') ? 'object-contain p-2 bg-slate-50' : ''}`} />
                 </div>
               </div>
            </div>
