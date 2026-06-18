@@ -15,7 +15,7 @@ import { clearBusinessError, clearPublicBusinessError, clearPublicBusiness } fro
 
 export const useBusiness = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { business, publicBusiness, loading, publicLoading, error, publicError, initialized, uploading, uploadError } = useSelector(
+  const { business, publicBusiness, loading, publicLoading, error, publicError, initialized, uploading, deleting, uploadError } = useSelector(
     (s: RootState) => s.business
   );
 
@@ -44,6 +44,7 @@ export const useBusiness = () => {
     publicError,
     initialized,
     uploading,
+    deleting,
     uploadError,
     submitIntake: (data: BusinessIntakeInput) =>
       dispatch(submitBusinessIntakeThunk(data)),

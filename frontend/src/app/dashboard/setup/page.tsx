@@ -13,6 +13,7 @@ import SalonTemplate from '@/components/templates/SalonTemplate';
 import TutorTemplate from '@/components/templates/TutorTemplate';
 import GymTemplate from '@/components/templates/GymTemplate';
 import RestaurantTemplate from '@/components/templates/RestaurantTemplate';
+import MakeupTemplate from '@/components/templates/MakeupTemplate';
 import { Business } from '@/services/business.service';
 import { SidebarContext } from '../layout';
 import { useContext } from 'react';
@@ -20,7 +21,7 @@ import { useContext } from 'react';
 const businessTypes = [
   { value: 'salon', label: 'Salon' },
   { value: 'tutor', label: 'Tutor' },
-  { value: 'boutique', label: 'Boutique' },
+  { value: 'makeup', label: 'Makeup Studio' },
   { value: 'gym', label: 'Gym' },
   { value: 'restaurant', label: 'Restaurant' },
   { value: 'other', label: 'Other' },
@@ -51,7 +52,7 @@ export default function BusinessSetupPage() {
   const [allowUsernameChange, setAllowUsernameChange] = useState(false);
   const [sameAsPhone, setSameAsPhone] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
-  const [activeTab, setActiveTab] = useState<'basic' | 'contact' | 'services' | 'hours'>('basic');
+  const [activeTab, setActiveTab] = useState<'basic' | 'contact' | 'services' | 'hours' | 'gallery'>('basic');
   const { setIsCollapsed } = useContext(SidebarContext);
 
   const [formData, setFormData] = useState({
@@ -63,6 +64,7 @@ export default function BusinessSetupPage() {
     contactPhone: '',
     contactEmail: '',
     contactAddress: '',
+    contactGoogleMapsLink: '',
     contactWhatsapp: '',
     socialInstagram: '',
     socialFacebook: '',
@@ -109,6 +111,7 @@ export default function BusinessSetupPage() {
       contactPhone: business.contact?.phone || '',
       contactEmail: business.contact?.email || '',
       contactAddress: business.contact?.address || '',
+      contactGoogleMapsLink: business.contact?.googleMapsLink || '',
       contactWhatsapp: business.contact?.whatsapp || '',
       socialInstagram: business.contact?.socialLinks?.instagram || '',
       socialFacebook: business.contact?.socialLinks?.facebook || '',
@@ -198,7 +201,7 @@ export default function BusinessSetupPage() {
       businessType: formData.businessType as
         | 'salon'
         | 'tutor'
-        | 'boutique'
+        | 'makeup'
         | 'gym'
         | 'restaurant'
         | 'other',
@@ -209,6 +212,7 @@ export default function BusinessSetupPage() {
         phone: formData.contactPhone,
         email: formData.contactEmail,
         address: formData.contactAddress,
+        googleMapsLink: formData.contactGoogleMapsLink,
         whatsapp: formData.contactWhatsapp,
         socialLinks: {
           instagram: formData.socialInstagram,
@@ -236,7 +240,7 @@ export default function BusinessSetupPage() {
     userId: user?._id || 'preview-user-id',
     username: formData.username || 'preview',
     businessName: formData.businessName || 'Your Business Name',
-    businessType: formData.businessType as 'salon' | 'tutor',
+    businessType: formData.businessType as 'salon' | 'tutor' | 'makeup' | 'gym' | 'restaurant' | 'other',
     tagline: formData.tagline || 'Your tagline here',
     description: formData.description || 'Business description goes here.',
     services: services.filter(s => s.name.trim() !== ''),
@@ -244,6 +248,7 @@ export default function BusinessSetupPage() {
       phone: formData.contactPhone,
       email: formData.contactEmail,
       address: formData.contactAddress,
+      googleMapsLink: formData.contactGoogleMapsLink,
       whatsapp: formData.contactWhatsapp,
       socialLinks: {
         instagram: formData.socialInstagram,
@@ -263,6 +268,7 @@ export default function BusinessSetupPage() {
     { id: 'contact', label: 'Contact & Social' },
     { id: 'services', label: 'Services' },
     { id: 'hours', label: 'Operating Hours' },
+    { id: 'gallery', label: 'Gallery' },
   ];
 
   return (
@@ -423,6 +429,13 @@ export default function BusinessSetupPage() {
                   value={formData.contactAddress}
                   onChange={(e) => handleChange('contactAddress', e.target.value)}
                 />
+
+                <Input
+                  label="Google Maps Link"
+                  placeholder="https://maps.app.goo.gl/..."
+                  value={formData.contactGoogleMapsLink}
+                  onChange={(e) => handleChange('contactGoogleMapsLink', e.target.value)}
+                />
               </div>
             </div>
 
@@ -537,11 +550,18 @@ export default function BusinessSetupPage() {
               ))}
             </div>
           </div>
-          {hasSubmittedSite && (
-          <div className="space-y-4">
-            <GalleryManager />
+          {/* GALLERY TAB */}
+          <div className={activeTab === 'gallery' ? 'block space-y-6' : 'hidden'}>
+            {hasSubmittedSite ? (
+              <GalleryManager />
+            ) : (
+              <div className="rounded-2xl border border-dashed border-white/10 p-12 text-center">
+                <p className="text-sm text-gray-500">
+                  Save your business data first to unlock the gallery.
+                </p>
+              </div>
+            )}
           </div>
-        )}
           {/* Global Submit */}
           <div className="pt-8 border-t border-white/10 flex items-center justify-between">
             <p className="text-sm text-gray-500">
@@ -587,6 +607,8 @@ export default function BusinessSetupPage() {
                 <GymTemplate business={previewBusinessData} />
               ) : formData.businessType === 'restaurant' ? (
                 <RestaurantTemplate business={previewBusinessData} />
+              ) : formData.businessType === 'makeup' ? (
+                <MakeupTemplate business={previewBusinessData} />
               ) : (
                 <div className="flex items-center justify-center h-full text-gray-500">
                   <div className="text-center">

@@ -14,6 +14,7 @@ export interface ContactInput {
   phone?: string;
   email?: string;
   address?: string;
+  googleMapsLink?: string;
   whatsapp?: string;
   socialLinks?: {
     instagram?: string;
@@ -40,7 +41,7 @@ export interface GalleryImage {
 export interface CreateBusinessInput {
   username: string;
   businessName: string;
-  businessType: 'salon' | 'tutor' | 'boutique' | 'gym' | 'restaurant' | 'other';
+  businessType: 'salon' | 'tutor' | 'makeup' | 'gym' | 'restaurant' | 'other';
   tagline?: string;
   description?: string;
   services?: ServiceItem[];
@@ -83,6 +84,7 @@ const sanitizeIntake = (data: IntakeBusinessInput): IntakeBusinessInput => ({
         phone: sanitizeString(data.contact.phone),
         email: sanitizeString(data.contact.email)?.toLowerCase(),
         address: sanitizeString(data.contact.address),
+        googleMapsLink: sanitizeString(data.contact.googleMapsLink),
         whatsapp: sanitizeString(data.contact.whatsapp),
         socialLinks: data.contact.socialLinks
           ? {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext, useContext, useCallback } from 'react';
 
 type ToastVariant = 'success' | 'error' | 'info' | 'warning';
 
@@ -50,7 +50,7 @@ const variantConfig: Record<
   },
 };
 
-export function Toast({ id, message, variant = 'info', duration = 4000, onDismiss }: ToastProps) {
+export function Toast({ id, message, variant = 'info', duration = 3000, onDismiss }: ToastProps) {
   const [visible, setVisible] = useState(true);
   const config = variantConfig[variant];
 
@@ -93,6 +93,7 @@ interface ToastItem {
   id: string;
   message: string;
   variant: ToastVariant;
+  duration?: number;
 }
 
 interface ToastContainerProps {
@@ -104,7 +105,7 @@ export function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
   return (
     <div className="fixed bottom-5 right-5 z-[100] flex flex-col gap-2 w-80">
       {toasts.map((t) => (
-        <Toast key={t.id} {...t} onDismiss={onDismiss} />
+        <Toast key={t.id} id={t.id} message={t.message} variant={t.variant} duration={t.duration} onDismiss={onDismiss} />
       ))}
     </div>
   );
@@ -115,21 +116,43 @@ export function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
 export function useToast() {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
-  const show = (message: string, variant: ToastVariant = 'info') => {
+  const show = useCallback((message: string, variant: ToastVariant = 'info', duration?: number) => {
     const id = Math.random().toString(36).slice(2);
-    setToasts((prev) => [...prev, { id, message, variant }]);
-  };
+    setToasts((prev) => [...prev, { id, message, variant, duration }]);
+  }, []);
 
-  const dismiss = (id: string) => {
+  const dismiss = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
-  };
+  }, []);
 
-  return {
-    toasts,
-    dismiss,
-    success: (msg: string) => show(msg, 'success'),
-    error:   (msg: string) => show(msg, 'error'),
-    info:    (msg: string) => show(msg, 'info'),
-    warning: (msg: string) => show(msg, 'warning'),
-  };
+  const success = useCallback((msg: string) => show(msg, 'success'), [show]);
+  const error   = useCallback((msg: string) => show(msg, 'error'), [show]);
+  const info    = useCallback((msg: string) => show(msg, 'info'), [show]);
+  const warning = useCallback((msg: string) => show(msg, 'warning'), [show]);
+
+  return { toasts, dismiss, success, error, info, warning };
+}
+
+// ── Shared Toast Context ─────────────────────────────────────────────────────
+
+type ToastContextType = ReturnType<typeof useToast>;
+
+const ToastContext = createContext<ToastContextType | null>(null);
+
+export function ToastProvider({ children }: { children: React.ReactNode }) {
+  const toast = useToast();
+  return (
+    <ToastContext.Provider value={toast}>
+      {children}
+      <ToastContainer toasts={toast.toasts} onDismiss={toast.dismiss} />
+    </ToastContext.Provider>
+  );
+}
+
+export function useSharedToast() {
+  const ctx = useContext(ToastContext);
+  if (!ctx) {
+    throw new Error('useSharedToast must be used within a ToastProvider');
+  }
+  return ctx;
 }

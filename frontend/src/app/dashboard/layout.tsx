@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import PrivateRoute from '@/utils/PrivateRoute';
 import Button from '@/components/ui/Button';
+import { ToastProvider } from '@/components/ui/Toast';
 
 const OverviewIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
@@ -76,6 +77,7 @@ export default function DashboardLayout({
 
   return (
     <PrivateRoute>
+      <ToastProvider>
       <SidebarContext.Provider value={{ isCollapsed, setIsCollapsed }}>
         <div className="min-h-screen bg-gray-950 text-white md:flex">
         <aside
@@ -141,6 +143,7 @@ export default function DashboardLayout({
         <main className="flex-1 p-4 transition-all duration-300 sm:p-6 md:p-10">{children}</main>
         </div>
       </SidebarContext.Provider>
+      </ToastProvider>
     </PrivateRoute>
   );
 }

@@ -10,6 +10,10 @@ export const addGalleryImage = async (
     throw new Error('No business page found');
   }
 
+  if (business.gallery && business.gallery.length >= 3) {
+    throw new Error('Gallery limit reached. You can only upload up to 3 images.');
+  }
+
   const image = await uploadToCloudinary(buffer, `landings/${business.username}`);
   await Business.updateOne({ userId }, { $push: { gallery: image } });
 
