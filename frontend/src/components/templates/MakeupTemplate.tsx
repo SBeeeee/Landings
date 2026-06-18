@@ -19,10 +19,10 @@ export default function MakeupTemplate({ business }: MakeupTemplateProps) {
   const [galleryIndex, setGalleryIndex] = useState(0);
 
   const nextImage = () => {
-    if (gallery.length > 0) setGalleryIndex((prev) => (prev + 1) % gallery.length);
+    if (displayGallery.length > 0) setGalleryIndex((prev) => (prev + 1) % displayGallery.length);
   };
   const prevImage = () => {
-    if (gallery.length > 0) setGalleryIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
+    if (displayGallery.length > 0) setGalleryIndex((prev) => (prev - 1 + displayGallery.length) % displayGallery.length);
   };
 
   const handleContactClick = (type: 'phone' | 'whatsapp' | 'email') => {
@@ -48,6 +48,16 @@ export default function MakeupTemplate({ business }: MakeupTemplateProps) {
   const hourEntries = operatingHours
     ? Object.entries(operatingHours).filter(([, v]) => v)
     : [];
+
+  const defaultGallery = [
+    { url: '/makeup1.svg' },
+    { url: '/makeup2.svg' },
+    { url: '/makeup3.svg' },
+  ];
+  const displayGallery = [
+    ...gallery,
+    ...defaultGallery.slice(gallery.length)
+  ].slice(0, Math.max(gallery.length, 3));
 
   return (
     <div
@@ -126,15 +136,15 @@ export default function MakeupTemplate({ business }: MakeupTemplateProps) {
         </div>
 
         {/* Right: Image / Gallery Slider */}
-        <div className="relative order-1 lg:order-2 h-[50vh] lg:h-auto bg-[#EFE3DA] overflow-hidden">
-          {gallery.length > 0 ? (
+        <div className="relative order-1 lg:order-2 flex items-center justify-center overflow-hidden min-h-[50vh]">
+          {displayGallery.length > 0 && (
             <>
               <img
-                src={gallery[galleryIndex].url}
+                src={displayGallery[galleryIndex].url}
                 alt={`Look ${galleryIndex + 1}`}
-                className="w-full h-full object-cover transition-opacity duration-500"
+                className={`w-full h-full object-contain transition-opacity duration-500 ${displayGallery[galleryIndex].url.endsWith('.svg') ? 'p-8 opacity-90' : ''}`}
               />
-              {gallery.length > 1 && (
+              {displayGallery.length > 1 && (
                 <>
                   <button
                     onClick={prevImage}
@@ -149,7 +159,7 @@ export default function MakeupTemplate({ business }: MakeupTemplateProps) {
                     →
                   </button>
                   <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-                    {gallery.map((_, i) => (
+                    {displayGallery.map((_, i) => (
                       <button
                         key={i}
                         onClick={() => setGalleryIndex(i)}
@@ -160,10 +170,6 @@ export default function MakeupTemplate({ business }: MakeupTemplateProps) {
                 </>
               )}
             </>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-[#F0E4DA]">
-              <p className="mu-display text-5xl italic text-[#C2876B]/20">before & after</p>
-            </div>
           )}
         </div>
       </section>
@@ -214,24 +220,22 @@ export default function MakeupTemplate({ business }: MakeupTemplateProps) {
       )}
 
       {/* ── GALLERY SHOWCASE ── */}
-      {gallery.length > 0 && (
+      {displayGallery.length > 0 && (
         <section className="px-6 sm:px-10 lg:px-16 py-20 lg:py-28 bg-[#F5EDE6]">
           <div className="mb-12">
             <span className="text-[0.6rem] tracking-[0.5em] uppercase text-[#B0897A] font-medium">Our Work</span>
             <h3 className="mu-display text-4xl lg:text-5xl font-bold text-[#5C3A32] mt-2">The Gallery</h3>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {gallery.map((img, i) => (
+          <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+            {displayGallery.map((img, i) => (
               <div
                 key={i}
-                className={`relative overflow-hidden rounded-xl group ${
-                  i % 5 === 0 ? 'md:col-span-2 md:row-span-2' : ''
-                }`}
+                className="relative overflow-hidden rounded-xl group break-inside-avoid"
               >
                 <img
                   src={img.url}
                   alt={`Gallery ${i + 1}`}
-                  className="w-full h-full object-cover aspect-square group-hover:scale-110 transition-transform duration-700"
+                  className={`w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700 ${img.url.endsWith('.svg') ? 'object-contain p-8 bg-white/30' : ''}`}
                 />
               </div>
             ))}

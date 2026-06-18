@@ -42,6 +42,16 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
     : [];
   const halfHours = Math.ceil(hourEntries.length / 2);
 
+  const defaultGallery = [
+    { url: '/salon1.svg' },
+    { url: '/salon2.svg' },
+    { url: '/salon3.svg' },
+  ];
+  const displayGallery = [
+    ...gallery,
+    ...defaultGallery.slice(gallery.length)
+  ].slice(0, Math.max(gallery.length, 3));
+
   const marqueeItems = [
     businessName,
     'Expert Stylists',
@@ -194,10 +204,10 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
         </div>
         )}
         {/* Hero Sprinkled Image */}
-        {gallery && gallery.length > 0 && (
-          <div className="absolute right-4 lg:right-24 top-1/2 -translate-y-1/2 hidden lg:block w-[300px] h-[400px] xl:w-[400px] xl:h-[500px] opacity-80 hover:opacity-100 transition-opacity duration-500 z-0">
+        {displayGallery && displayGallery.length > 0 && (
+          <div className="absolute right-4 lg:right-24 top-1/2 -translate-y-1/2 hidden lg:block w-[300px] xl:w-[400px] aspect-square opacity-80 hover:opacity-100 transition-opacity duration-500 z-0 bg-white/5 rounded-t-[150px] rounded-b-md overflow-hidden shadow-[0_0_40px_rgba(201,168,76,0.15)] border border-[#C9A84C]/30">
             <div className="absolute inset-0 bg-[#C9A84C] opacity-20 blur-3xl rounded-full"></div>
-            <img src={gallery[0].url} alt="Salon Style" className="relative w-full h-full object-cover rounded-t-[150px] rounded-b-md shadow-[0_0_40px_rgba(201,168,76,0.15)] border border-[#C9A84C]/30" />
+            <img src={displayGallery[0].url} alt="Salon Style" className={`relative w-full h-full object-cover ${displayGallery[0].url.endsWith('.svg') ? 'p-8' : ''}`} />
           </div>
         )}
 
@@ -284,10 +294,10 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
           </div>
 
           {/* Service Sprinkled Image */}
-          {gallery && gallery.length > 1 && (
+          {displayGallery && displayGallery.length > 1 && (
             <div className="mt-20 max-w-4xl mx-auto relative group">
               <div className="absolute inset-0 bg-[#C9A84C] opacity-10 blur-2xl rounded-full transition-opacity duration-700 group-hover:opacity-25"></div>
-              <img src={gallery[1].url} alt="Service detail" className="relative w-full h-[300px] md:h-[400px] object-cover rounded-2xl border border-[#C9A84C]/20 shadow-[0_10px_40px_rgba(201,168,76,0.1)]" />
+              <img src={displayGallery[1].url} alt="Service detail" className={`relative w-full h-auto object-cover rounded-2xl border border-[#C9A84C]/20 shadow-[0_10px_40px_rgba(201,168,76,0.1)] ${displayGallery[1].url.endsWith('.svg') ? 'object-contain p-8 bg-[#FBF9F6]' : ''}`} />
             </div>
           )}
         </section>
@@ -332,11 +342,11 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
                 )
               )}
               </div>
-              {gallery && gallery.length > 2 && (
+              {displayGallery && displayGallery.length > 2 && (
                 <div className="flex-1 hidden md:block max-w-[300px]">
-                  <div className="relative aspect-[3/4] w-full group">
+                  <div className="relative aspect-square w-full group bg-[#FBF9F6] rounded-tl-full rounded-tr-full rounded-b-xl overflow-hidden border-[0.5px] border-[#C9A84C]/20 shadow-[0_10px_30px_rgba(201,168,76,0.05)]">
                     <div className="absolute inset-0 bg-[#C9A84C] opacity-10 blur-xl rounded-full transition-opacity duration-700 group-hover:opacity-20"></div>
-                    <img src={gallery[2].url} alt="Salon Hours" className="relative w-full h-full object-cover rounded-tl-full rounded-tr-full rounded-b-xl border-[0.5px] border-[#C9A84C]/20 shadow-[0_10px_30px_rgba(201,168,76,0.05)]" />
+                    <img src={displayGallery[2].url} alt="Salon Hours" className={`relative w-full h-full object-cover ${displayGallery[2].url.endsWith('.svg') ? 'p-6' : ''}`} />
                   </div>
                 </div>
               )}

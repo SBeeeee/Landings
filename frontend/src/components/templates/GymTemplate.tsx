@@ -41,6 +41,16 @@ export default function GymTemplate({ business }: GymTemplateProps) {
     : [];
   const halfHours = Math.ceil(hourEntries.length / 2);
 
+  const defaultGallery = [
+    { url: '/gym1.svg' },
+    { url: '/gym2.svg' },
+    { url: '/gym3.svg' },
+  ];
+  const displayGallery = [
+    ...gallery,
+    ...defaultGallery.slice(gallery.length)
+  ].slice(0, Math.max(gallery.length, 3));
+
   const marqueeItems = [
     'TRAIN HARD',
     'NO EXCUSES',
@@ -196,24 +206,13 @@ export default function GymTemplate({ business }: GymTemplateProps) {
 
       {/* GALLERY / SHOWCASE */}
       <section className="px-4 sm:px-8 lg:px-12 py-12">
-        {gallery && gallery.length > 0 ? (
-          <div className={`max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 ${gallery.length > 2 ? 'lg:grid-cols-3' : ''} gap-8`}>
-            {gallery.map((img, i) => (
-              <div key={i} className="flex justify-center items-center gym-card overflow-hidden border border-white/5">
-                <img src={img.url} alt={`Gallery Image ${i + 1}`} className="w-full h-80 md:h-96 object-cover grayscale hover:grayscale-0 transition-all duration-500" />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 opacity-50 hover:opacity-100 transition-opacity duration-500">
-            <div className="flex justify-center items-center p-12 gym-card">
-              <img src="/gym1.svg" alt="Gym Graphic 1" className="w-3/4 h-auto drop-shadow-[0_0_15px_rgba(255,42,42,0.2)]" />
+        <div className={`max-w-7xl mx-auto columns-1 md:columns-2 ${displayGallery.length > 2 ? 'lg:columns-3' : ''} gap-8 space-y-8`}>
+          {displayGallery.map((img, i) => (
+            <div key={i} className="flex justify-center items-center gym-card overflow-hidden border border-white/5 break-inside-avoid">
+              <img src={img.url} alt={`Gallery Image ${i + 1}`} className={`w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-500 ${img.url.endsWith('.svg') ? 'object-contain p-8 opacity-50 hover:opacity-100 drop-shadow-[0_0_15px_rgba(255,42,42,0.2)]' : ''}`} />
             </div>
-            <div className="flex justify-center items-center p-12 gym-card">
-              <img src="/gym2.svg" alt="Gym Graphic 2" className="w-3/4 h-auto drop-shadow-[0_0_15px_rgba(255,42,42,0.2)]" />
-            </div>
-          </div>
-        )}
+          ))}
+        </div>
       </section>
 
       {/* SERVICES */}
