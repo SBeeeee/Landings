@@ -3,7 +3,7 @@ import api from '../utils/api';
 export type BusinessType =
   | 'salon'
   | 'tutor'
-  | 'boutique'
+  | 'makeup'
   | 'gym'
   | 'restaurant'
   | 'other';
@@ -25,6 +25,7 @@ export interface ContactInput {
   phone?: string;
   email?: string;
   address?: string;
+  googleMapsLink?: string;
   whatsapp?: string;
   socialLinks?: SocialLinks;
 }
@@ -101,7 +102,7 @@ const businessService = {
   },
 
   deleteGalleryImage: async (publicId: string): Promise<void> => {
-    await api.delete(`/gallery/images/${publicId}`);
+    await api.delete(`/gallery/images/${encodeURIComponent(publicId)}`);
   },
   publishBusiness: async (): Promise<Business> => {
     const res = await api.patch('/business/me/publish');

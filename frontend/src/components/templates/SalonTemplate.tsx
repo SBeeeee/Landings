@@ -400,19 +400,17 @@ export default function SalonTemplate({ business }: SalonTemplateProps) {
               <div className="text-2xl mb-4 text-[#C9A84C]">◉</div>
               <div className="text-[0.58rem] tracking-[0.35em] uppercase text-[#D4C9B2] mb-2">Visit Us</div>
               <div className="salon-serif text-[0.9rem] text-[#F5F0E8] mb-4">{contact.address}</div>
-              <button
-                onClick={() =>
-                  contact.address &&
-                  window.open(
-                    `https://maps.google.com/?q=${encodeURIComponent(contact.address)}`,
-                    '_blank'
-                  )
-                }
-                className="salon-btn-ghost text-[#C9A84C] text-[0.6rem] tracking-[0.2em] uppercase px-4 py-1.5 bg-transparent"
-                style={{ border: '0.5px solid rgba(201,168,76,0.4)' }}
-              >
-                Get Directions
-              </button>
+              {contact?.googleMapsLink && (
+                <button
+                  onClick={() =>
+                    window.open(contact.googleMapsLink, '_blank')
+                  }
+                  className="salon-btn-ghost text-[#C9A84C] text-[0.6rem] tracking-[0.2em] uppercase px-4 py-1.5 bg-transparent"
+                  style={{ border: '0.5px solid rgba(201,168,76,0.4)' }}
+                >
+                  Get Directions
+                </button>
+              )}
             </div>
           )}
         </div>

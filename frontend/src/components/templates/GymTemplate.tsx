@@ -286,6 +286,14 @@ export default function GymTemplate({ business }: GymTemplateProps) {
                 <div>
                   <h4 className="gym-title text-[#FF2A2A] tracking-wider mb-2">LOCATION</h4>
                   <p className="text-xl font-light">{contact.address}</p>
+                  {contact.googleMapsLink && (
+                    <button
+                      onClick={() => window.open(contact.googleMapsLink, '_blank')}
+                      className="mt-3 gym-title text-sm tracking-widest text-gray-400 hover:text-[#FF2A2A] transition-colors"
+                    >
+                      GET DIRECTIONS →
+                    </button>
+                  )}
                 </div>
               )}
               {contact?.phone && (

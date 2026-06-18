@@ -29,7 +29,7 @@ export default function Hero() {
 
       {/* Sub-headline */}
       <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-gray-400">
-        A clean, shareable page for your salon, gym, tutor, or boutique — no
+        A clean, shareable page for your salon, gym, tutor, or makeup studio — no
         website builder, no developer, no hassle. Just fill in your details and
         share the link.
       </p>
